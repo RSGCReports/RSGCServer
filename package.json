@@ -1,0 +1,38 @@
+{
+  "name": "rsgcserver",
+  "version": "0.0.1",
+  "description": "A server for the collision system APIs, ORMs, etc...",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "cross-env LOG_LEVEL=debug nodemon ./src/index.js --watch src",
+    "debug": "cross-env LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/index.js --watch src",
+    "lint": "eslint --config .eslintrc.js src/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfrunza13/RSGCServer.git"
+  },
+  "author": "Stefan, Rudy, Chen, Gen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sfrunza13/RSGCServer/issues"
+  },
+  "homepage": "https://github.com/sfrunza13/RSGCServer#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "pino": "^8.8.0",
+    "pino-http": "^8.3.1",
+    "pino-pretty": "^9.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^8.32.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3"
+  }
+}
