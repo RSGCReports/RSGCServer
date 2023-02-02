@@ -7,34 +7,121 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model testTable1 {
-  phoneNum Int    @id
-  address  String @db.VarChar(10)
-  orderNum Int
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
-
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+  username   Int  @id
+  fullname String
+  email    String
+  dob       DateTime
+  disabilities String
+  yearsDriving DateTime
+  homeAddress String
+  businessAddress String 
+  phoneNumber String
+  PolicyClient PolicyClient[]
 }
+
+model PolicyClient {
+  policyClientId  Int  @id
+  username Int
+  User User @relation(fields: [username], references: [username])
+  policyId Int
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId])
+}
+
+model InsurancePolicy {
+  policyId  Int  @id
+  insurer String
+  insurerName String
+  Agent String
+  homeAddress String
+  postalCode String
+  businessAddress String 
+  businessPostalCode String
+  policyNumber Int
+  PolicyClient PolicyClient[]
+  Vehicle_Policy Vehicle_Policy[]
+}
+
+model VehicleInformation{
+  licensePlateNo  Int  @id
+  registeredOwner String
+  actualOwner String
+  addressRegisteredOwner String
+  addressActualOwner String
+  province String
+  make String 
+  year Int
+  model String
+  type String
+  VIN Int
+  Vehicle_Policy Vehicle_Policy[]
+}
+
+model Vehicle_Policy{
+  Vehicle_Policy_Id  Int  @id
+  policyId Int
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId])
+  licensePlateNo Int
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo])
+}
+
+//------------------------------------------
+// model Users {
+//   username  String @id
+//   firstName String
+//   lastName  String
+//   email     String @unique
+
+//   createdAt    DateTime       @default(now())
+//   updatedAt    DateTime       @updatedAt
+//   subdomians   Subdomains[]
+//   certificates Certificates?
+// }
+
+// model Subdomains {
+//   id          Int             @id @default(autoincrement())
+//   username    String
+//   name        String
+//   type        SubdomainType
+//   value       String
+//   description String
+//   course      String
+//   ports       String
+//   createdAt   DateTime        @default(now())
+//   updatedAt   DateTime        @updatedAt
+//   expiresAt   DateTime
+//   status      SubdomainStatus
+//   user        Users           @relation(fields: [username], references: [username])
+// }
+
+// model Certificates {
+//   id          Int          @id @default(autoincrement())
+//   username    String       @unique
+//   subject     String
+//   certificate String
+//   privkey     String
+//   validFrom   DateTime     @default(now())
+//   validTo     DateTime 
+//   user        Users        @relation(fields: [username], references: [username])
+//   challange   Challenges[]
+// }
+
+// model Challenges {
+//   id            Int          @id @default(autoincrement())
+//   challengeKey  String       @db.VarChar(255)
+//   certificateId Int
+//   certificate   Certificates @relation(fields: [certificateId], references: [id])
+// }
+
+// enum SubdomainType {
+//   CNAME
+//   A
+//   AAAA
+//   TXT
+// }
+
+// enum SubdomainStatus {
+//   active
+//   pending
+//   error
+// }
