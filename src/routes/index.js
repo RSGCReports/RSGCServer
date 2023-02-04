@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const { hostname } = require('os');
 const { version, author } = require('../../package.json');
 const { auth } = require('../auth');
@@ -20,14 +19,6 @@ router.get('/', (req, res) => {
   };
 
   res.status(200).json({ ...body });
-});
-
-router.post('/', bodyParser.json(), (req, res) => {
-  try {
-    res.status(201).json({ status: 'ok' });
-  } catch (err) {
-    res.status(400).json({ status: 'error', message: err.message });
-  }
 });
 
 module.exports = router;
