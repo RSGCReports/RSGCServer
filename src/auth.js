@@ -20,7 +20,7 @@ module.exports.strategy = () =>
     try {
       const user = await jwtVerifier.verify(token);
       logger.debug({ user }, 'All good inside auth.js');
-      done(null, user.username);
+      done(null, user['cognito:username']);
     } catch (err) {
       logger.error({ err, token }, "Something's wrong in auth.js");
       done(null, false);
