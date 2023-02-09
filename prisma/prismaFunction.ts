@@ -12,7 +12,8 @@ export async function insertUserRow(
   yearsDriving: User['yearsDriving'],
   homeAddress: User['homeAddress'],
   businessAddress: User['businessAddress'],
-  phoneNumber: User['phoneNumber']
+  phoneNumber: User['phoneNumber'],
+  driverLicense: User['driverLicense']
 ) {
   await prisma.user.create({
     data: {
@@ -25,6 +26,7 @@ export async function insertUserRow(
       homeAddress,
       businessAddress,
       phoneNumber,
+      driverLicense,
     },
   });
 
@@ -44,7 +46,8 @@ export async function updateUserRow(
   yearsDriving: User['yearsDriving'],
   homeAddress: User['homeAddress'],
   businessAddress: User['businessAddress'],
-  phoneNumber: User['phoneNumber']
+  phoneNumber: User['phoneNumber'],
+  driverLicense: User['driverLicense']
 ) {
   await prisma.user.update({
     where: { username },
@@ -58,6 +61,7 @@ export async function updateUserRow(
       homeAddress,
       businessAddress,
       phoneNumber,
+      driverLicense,
     },
   });
 
@@ -73,9 +77,15 @@ export async function insertPolicyRow(
   insurer: InsurancePolicy['insurer'],
   insurerName: InsurancePolicy['insurerName'],
   Agent: InsurancePolicy['Agent'],
-  homeAddress: InsurancePolicy['homeAddress'],
-  postalCode: InsurancePolicy['postalCode'],
-  businessAddress: InsurancePolicy['businessAddress'],
+  homeStreet: InsurancePolicy['homeStreet'],
+  homeCity: InsurancePolicy['homeCity'],
+  homeCountry: InsurancePolicy['homeCountry'],
+  homeProvince: InsurancePolicy['homeProvince'],
+  homePostalCode: InsurancePolicy['hhomePostalCode'],
+  businessStreet: InsurancePolicy['businessStreet'],
+  businessCity: InsurancePolicy['businessCity'],
+  businessCountry: InsurancePolicy['businessCountry'],
+  businessProvince: InsurancePolicy['businessProvince'],
   businessPostalCode: InsurancePolicy['businessPostalCode'],
   policyNumber: InsurancePolicy['policyNumber'],
   username: User['username']
@@ -85,9 +95,15 @@ export async function insertPolicyRow(
       insurer,
       insurerName,
       Agent,
-      homeAddress,
-      postalCode,
-      businessAddress,
+      homeStreet,
+      homeCity,
+      homeCountry,
+      homeProvince,
+      homePostalCode,
+      businessStreet,
+      businessCity,
+      businessCountry,
+      businessProvince,
       businessPostalCode,
       policyNumber,
       PolicyClient: {
@@ -112,9 +128,15 @@ export async function updatePolicyRow(
   insurer: InsurancePolicy['insurer'],
   insurerName: InsurancePolicy['insurerName'],
   Agent: InsurancePolicy['Agent'],
-  homeAddress: InsurancePolicy['homeAddress'],
-  postalCode: InsurancePolicy['postalCode'],
-  businessAddress: InsurancePolicy['businessAddress'],
+  homeStreet: InsurancePolicy['homeStreet'],
+  homeCity: InsurancePolicy['homeCity'],
+  homeCountry: InsurancePolicy['homeCountry'],
+  homeProvince: InsurancePolicy['homeProvince'],
+  homePostalCode: InsurancePolicy['hhomePostalCode'],
+  businessStreet: InsurancePolicy['businessStreet'],
+  businessCity: InsurancePolicy['businessCity'],
+  businessCountry: InsurancePolicy['businessCountry'],
+  businessProvince: InsurancePolicy['businessProvince'],
   businessPostalCode: InsurancePolicy['businessPostalCode'],
   policyNumber: InsurancePolicy['policyNumber']
 ) {
@@ -133,9 +155,15 @@ export async function updatePolicyRow(
       insurer,
       insurerName,
       Agent,
-      homeAddress,
-      postalCode,
-      businessAddress,
+      homeStreet,
+      homeCity,
+      homeCountry,
+      homeProvince,
+      homePostalCode,
+      businessStreet,
+      businessCity,
+      businessCountry,
+      businessProvince,
       businessPostalCode,
       policyNumber,
     },

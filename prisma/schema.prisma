@@ -8,59 +8,66 @@ datasource db {
 }
 
 model User {
-  username   Int  @id
-  fullname String
-  email    String
-  dob       DateTime
-  disabilities String
-  yearsDriving DateTime
-  homeAddress String
-  businessAddress String 
-  phoneNumber String
-  PolicyClient PolicyClient[]
+  username        String            @id
+  fullname        String
+  email           String
+  dob             DateTime
+  disabilities    String
+  yearsDriving    DateTime
+  homeAddress     String
+  businessAddress String
+  phoneNumber     String
+  driverLicense   Int
+  PolicyClient    PolicyClient[]
 }
 
 model PolicyClient {
-  policyClientId  Int  @id @default(autoincrement())
-  username Int
-  User User @relation(fields: [username], references: [username], onDelete: Cascade)
-  policyId Int
+  policyClientId  Int             @id @default(autoincrement())
+  username        String
+  policyId        Int
   InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
+  User            User            @relation(fields: [username], references: [username], onDelete: Cascade)
 }
 
 model InsurancePolicy {
-  policyId  Int  @id @default(autoincrement())
-  insurer String
-  insurerName String
-  Agent String
-  homeAddress String
-  postalCode String
-  businessAddress String 
+  policyId           Int             @id @default(autoincrement())
+  insurer            String
+  insurerName        String
+  Agent              String
+  homeStreet         String
+  homeCity           String
+  homeCountry        String
+  homeProvince       String
+  homePostalCode     String
+  businessStreet     String
+  businessCity       String
+  businessCountry    String
+  businessProvince   String
   businessPostalCode String
-  policyNumber Int
-  PolicyClient PolicyClient[]
-  Vehicle_Policy VehiclePolicy[]
+  policyNumber       Int
+  PolicyClient       PolicyClient[]
+  Vehicle_Policy     VehiclePolicy[]
 }
 
-model VehicleInformation{
-  licensePlateNo  String  @id
-  registeredOwner String
-  actualOwner String
+model VehicleInformation {
+  licensePlateNo         String          @id
+  registeredOwner        String
+  actualOwner            String
   addressRegisteredOwner String
-  addressActualOwner String
-  province String
-  make String 
-  year Int
-  model String
-  type String
-  VIN Int
-  Vehicle_Policy VehiclePolicy[]
+  addressActualOwner     String
+  province               String
+  make                   String
+  year                   Int
+  model                  String
+  type                   String
+  VIN                    Int
+  Vehicle_Policy         VehiclePolicy[]
 }
 
-model VehiclePolicy{
-  VehiclePolicyId  Int  @id @default(autoincrement())
-  policyId Int
-  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
-  licensePlateNo String
+model VehiclePolicy {
+  VehiclePolicyId    Int                @id @default(autoincrement())
+  policyId           Int
+  licensePlateNo     String
   VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
+  InsurancePolicy    InsurancePolicy    @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
 }
