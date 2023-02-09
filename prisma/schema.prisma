@@ -21,15 +21,15 @@ model User {
 }
 
 model PolicyClient {
-  policyClientId  Int  @id
+  policyClientId  Int  @id @default(autoincrement())
   username Int
-  User User @relation(fields: [username], references: [username])
+  User User @relation(fields: [username], references: [username], onDelete: Cascade)
   policyId Int
-  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId])
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
 }
 
 model InsurancePolicy {
-  policyId  Int  @id
+  policyId  Int  @id @default(autoincrement())
   insurer String
   insurerName String
   Agent String
@@ -39,11 +39,11 @@ model InsurancePolicy {
   businessPostalCode String
   policyNumber Int
   PolicyClient PolicyClient[]
-  Vehicle_Policy Vehicle_Policy[]
+  Vehicle_Policy VehiclePolicy[]
 }
 
 model VehicleInformation{
-  licensePlateNo  Int  @id
+  licensePlateNo  String  @id
   registeredOwner String
   actualOwner String
   addressRegisteredOwner String
@@ -54,74 +54,13 @@ model VehicleInformation{
   model String
   type String
   VIN Int
-  Vehicle_Policy Vehicle_Policy[]
+  Vehicle_Policy VehiclePolicy[]
 }
 
-model Vehicle_Policy{
-  Vehicle_Policy_Id  Int  @id
+model VehiclePolicy{
+  VehiclePolicyId  Int  @id @default(autoincrement())
   policyId Int
-  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId])
-  licensePlateNo Int
-  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo])
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
+  licensePlateNo String
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
 }
-
-//------------------------------------------
-// model Users {
-//   username  String @id
-//   firstName String
-//   lastName  String
-//   email     String @unique
-
-//   createdAt    DateTime       @default(now())
-//   updatedAt    DateTime       @updatedAt
-//   subdomians   Subdomains[]
-//   certificates Certificates?
-// }
-
-// model Subdomains {
-//   id          Int             @id @default(autoincrement())
-//   username    String
-//   name        String
-//   type        SubdomainType
-//   value       String
-//   description String
-//   course      String
-//   ports       String
-//   createdAt   DateTime        @default(now())
-//   updatedAt   DateTime        @updatedAt
-//   expiresAt   DateTime
-//   status      SubdomainStatus
-//   user        Users           @relation(fields: [username], references: [username])
-// }
-
-// model Certificates {
-//   id          Int          @id @default(autoincrement())
-//   username    String       @unique
-//   subject     String
-//   certificate String
-//   privkey     String
-//   validFrom   DateTime     @default(now())
-//   validTo     DateTime 
-//   user        Users        @relation(fields: [username], references: [username])
-//   challange   Challenges[]
-// }
-
-// model Challenges {
-//   id            Int          @id @default(autoincrement())
-//   challengeKey  String       @db.VarChar(255)
-//   certificateId Int
-//   certificate   Certificates @relation(fields: [certificateId], references: [id])
-// }
-
-// enum SubdomainType {
-//   CNAME
-//   A
-//   AAAA
-//   TXT
-// }
-
-// enum SubdomainStatus {
-//   active
-//   pending
-//   error
-// }
