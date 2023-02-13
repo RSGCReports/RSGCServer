@@ -8,17 +8,25 @@ datasource db {
 }
 
 model User {
-  username        String            @id
-  fullname        String
-  email           String
-  dob             DateTime
-  disabilities    String
-  yearsDriving    DateTime
-  homeAddress     String
-  businessAddress String
-  phoneNumber     String
-  driverLicense   Int
-  PolicyClient    PolicyClient[]
+  username           String            @id
+  fullname           String
+  email              String
+  dob                DateTime
+  disabilities       String?
+  yearsDriving       DateTime
+  homeStreet         String
+  homeCity           String
+  homeCountry        String
+  homeProvince       String
+  homePostalCode     String
+  businessStreet     String?
+  businessCity       String?
+  businessCountry    String?
+  businessProvince   String?
+  businessPostalCode String?
+  phoneNumber        String
+  driverLicense      String
+  PolicyClient       PolicyClient[]
 }
 
 model PolicyClient {
@@ -39,29 +47,37 @@ model InsurancePolicy {
   homeCountry        String
   homeProvince       String
   homePostalCode     String
-  businessStreet     String
-  businessCity       String
-  businessCountry    String
-  businessProvince   String
-  businessPostalCode String
+  businessStreet     String?
+  businessCity       String?
+  businessCountry    String?
+  businessProvince   String?
+  businessPostalCode String?
   policyNumber       Int
   PolicyClient       PolicyClient[]
   Vehicle_Policy     VehiclePolicy[]
 }
 
 model VehicleInformation {
-  licensePlateNo         String          @id
-  registeredOwner        String
-  actualOwner            String
-  addressRegisteredOwner String
-  addressActualOwner     String
-  province               String
-  make                   String
-  year                   Int
-  model                  String
-  type                   String
-  VIN                    Int
-  Vehicle_Policy         VehiclePolicy[]
+  licensePlateNo            String          @id
+  registeredOwner           String
+  actualOwner               String
+  RegisteredOwnerStreet     String
+  RegisteredOwnerCity       String
+  RegisteredOwnerCountry    String
+  RegisteredOwnerProvince   String
+  RegisteredOwnerPostalCode String
+  ActualOwnerStreet         String
+  ActualOwnerCity           String
+  ActualOwnerCountry        String
+  ActualOwnerProvince       String
+  ActualOwnerPostalCode     String
+  province                  String
+  make                      String
+  year                      Int
+  model                     String
+  type                      String
+  VIN                       Int
+  Vehicle_Policy            VehiclePolicy[]
 }
 
 model VehiclePolicy {
