@@ -81,7 +81,7 @@ export async function insertPolicyRow(
   homeCity: InsurancePolicy['homeCity'],
   homeCountry: InsurancePolicy['homeCountry'],
   homeProvince: InsurancePolicy['homeProvince'],
-  homePostalCode: InsurancePolicy['hhomePostalCode'],
+  homePostalCode: InsurancePolicy['homePostalCode'],
   businessStreet: InsurancePolicy['businessStreet'],
   businessCity: InsurancePolicy['businessCity'],
   businessCountry: InsurancePolicy['businessCountry'],
