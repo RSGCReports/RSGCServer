@@ -1,16 +1,14 @@
-import {
-  insertUserRow,
-  insertPolicyRow,
-  insertVehicleRow,
-  deleteUserByUsername,
-} from './prismaFunction';
+import { insertUserRow, insertPolicyRow, insertVehicleRow } from './prismaFunction';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  //await deleteUserByUsername('user1'); //<==TODO
-  //await prisma.user.deleteMany({ where: { username: 'user1' } }); //<==TODO
+  await prisma.user.deleteMany().catch(() => {});
+  await prisma.insurancePolicy.deleteMany().catch(() => {});
+  await prisma.policyClient.deleteMany().catch(() => {});
+  await prisma.vehicleInformation.deleteMany().catch(() => {});
+  await prisma.vehiclePolicy.deleteMany().catch(() => {});
 
   await insertUserRow(
     'user1',
@@ -71,8 +69,8 @@ async function main() {
     'Starlight',
     'Personal',
     '8G5HJUS68J5260025',
-    'Sunlife Inc.',
-    4654616564
+    'John Smith',
+    465461656
   );
 }
 
