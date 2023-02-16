@@ -8,12 +8,20 @@ export async function insertUserRow(
   fullname: User['fullname'],
   email: User['email'],
   dob: User['dob'],
-  disabilities: User['disabilities'],
   yearsDriving: User['yearsDriving'],
-  homeAddress: User['homeAddress'],
-  businessAddress: User['businessAddress'],
+  homeStreet: User['homeStreet'],
+  homeCity: User['homeCity'],
+  homeProvince: User['homeProvince'],
+  homeCountry: User['homeCountry'],
+  homePostalCode: User['homePostalCode'],
   phoneNumber: User['phoneNumber'],
-  driverLicense: User['driverLicense']
+  driverLicense: User['driverLicense'],
+  businessStreet?: User['businessStreet'],
+  businessCity?: User['businessCity'],
+  businessProvince?: User['businessProvince'],
+  businessCountry?: User['businessCountry'],
+  businessPostalCode?: User['businessPostalCode'],
+  disabilities?: User['disabilities']
 ) {
   await prisma.user.create({
     data: {
@@ -23,8 +31,16 @@ export async function insertUserRow(
       dob,
       disabilities,
       yearsDriving,
-      homeAddress,
-      businessAddress,
+      homeStreet,
+      homeCity,
+      homeProvince,
+      homeCountry,
+      homePostalCode,
+      businessStreet,
+      businessCity,
+      businessProvince,
+      businessCountry,
+      businessPostalCode,
       phoneNumber,
       driverLicense,
     },
@@ -34,20 +50,29 @@ export async function insertUserRow(
 }
 
 export async function getUserByUsername(username: User['username']) {
-  return prisma.user.findUnique({ where: { username } });
+  return await prisma.user.findUnique({ where: { username } });
 }
 
 export async function updateUserRow(
   username: User['username'],
-  fullname: User['fullname'],
-  email: User['email'],
-  dob: User['dob'],
-  disabilities: User['disabilities'],
-  yearsDriving: User['yearsDriving'],
-  homeAddress: User['homeAddress'],
-  businessAddress: User['businessAddress'],
-  phoneNumber: User['phoneNumber'],
-  driverLicense: User['driverLicense']
+  fullname?: User['fullname'],
+  email?: User['email'],
+  dob?: User['dob'],
+  disabilities?: User['disabilities'],
+  yearsDriving?: User['yearsDriving'],
+  homeStreet?: User['homeStreet'],
+  homeCity?: User['homeCity'],
+  homeProvince?: User['homeProvince'],
+  homeCountry?: User['homeCountry'],
+  homePostalCode?: User['homePostalCode'],
+  businessStreet?: User['businessStreet'],
+  businessCity?: User['businessCity'],
+  businessProvince?: User['businessProvince'],
+  businessCountry?: User['businessCountry'],
+  businessPostalCode?: User['businessPostalCode'],
+
+  phoneNumber?: User['phoneNumber'],
+  driverLicense?: User['driverLicense']
 ) {
   await prisma.user.update({
     where: { username },
@@ -58,8 +83,16 @@ export async function updateUserRow(
       dob,
       disabilities,
       yearsDriving,
-      homeAddress,
-      businessAddress,
+      homeStreet,
+      homeCity,
+      homeProvince,
+      homeCountry,
+      homePostalCode,
+      businessStreet,
+      businessCity,
+      businessProvince,
+      businessCountry,
+      businessPostalCode,
       phoneNumber,
       driverLicense,
     },
@@ -69,7 +102,7 @@ export async function updateUserRow(
 }
 
 export async function deleteUserByUsername(username: User['username']) {
-  return prisma.user.delete({ where: { username } });
+  return await prisma.user.delete({ where: { username } });
 }
 
 // ====CRUD for Policy====
@@ -82,13 +115,13 @@ export async function insertPolicyRow(
   homeCountry: InsurancePolicy['homeCountry'],
   homeProvince: InsurancePolicy['homeProvince'],
   homePostalCode: InsurancePolicy['homePostalCode'],
-  businessStreet: InsurancePolicy['businessStreet'],
-  businessCity: InsurancePolicy['businessCity'],
-  businessCountry: InsurancePolicy['businessCountry'],
-  businessProvince: InsurancePolicy['businessProvince'],
-  businessPostalCode: InsurancePolicy['businessPostalCode'],
   policyNumber: InsurancePolicy['policyNumber'],
-  username: User['username']
+  username: User['username'],
+  businessStreet?: InsurancePolicy['businessStreet'],
+  businessCity?: InsurancePolicy['businessCity'],
+  businessCountry?: InsurancePolicy['businessCountry'],
+  businessProvince?: InsurancePolicy['businessProvince'],
+  businessPostalCode?: InsurancePolicy['businessPostalCode']
 ) {
   await prisma.insurancePolicy.create({
     data: {
@@ -119,7 +152,7 @@ export async function getPolicyByUsernameAndPolicyNumber(
   insurerName: InsurancePolicy['insurerName'],
   policyNumber: InsurancePolicy['policyNumber']
 ) {
-  return prisma.insurancePolicy.findFirst({
+  return await prisma.insurancePolicy.findFirst({
     where: { AND: [{ insurerName }, { policyNumber }] },
   });
 }
@@ -132,13 +165,13 @@ export async function updatePolicyRow(
   homeCity: InsurancePolicy['homeCity'],
   homeCountry: InsurancePolicy['homeCountry'],
   homeProvince: InsurancePolicy['homeProvince'],
-  homePostalCode: InsurancePolicy['hhomePostalCode'],
-  businessStreet: InsurancePolicy['businessStreet'],
-  businessCity: InsurancePolicy['businessCity'],
-  businessCountry: InsurancePolicy['businessCountry'],
-  businessProvince: InsurancePolicy['businessProvince'],
-  businessPostalCode: InsurancePolicy['businessPostalCode'],
-  policyNumber: InsurancePolicy['policyNumber']
+  homePostalCode: InsurancePolicy['homePostalCode'],
+  policyNumber: InsurancePolicy['policyNumber'],
+  businessStreet?: InsurancePolicy['businessStreet'],
+  businessCity?: InsurancePolicy['businessCity'],
+  businessCountry?: InsurancePolicy['businessCountry'],
+  businessProvince?: InsurancePolicy['businessProvince'],
+  businessPostalCode?: InsurancePolicy['businessPostalCode']
 ) {
   // Get policy id
   let policyId = 0;
@@ -185,7 +218,7 @@ export async function deletePolicyByUsername(
   });
 
   // Do the update
-  return prisma.insurancePolicy.delete({ where: { policyId } });
+  return await prisma.insurancePolicy.delete({ where: { policyId } });
 }
 
 // ====CRUD for VehicleInformation====
@@ -193,8 +226,16 @@ export async function insertVehicleRow(
   licensePlateNo: VehicleInformation['licensePlateNo'],
   registeredOwner: VehicleInformation['registeredOwner'],
   actualOwner: VehicleInformation['actualOwner'],
-  addressRegisteredOwner: VehicleInformation['addressRegisteredOwner'],
-  addressActualOwner: VehicleInformation['addressActualOwner'],
+  registeredOwnerStreet: VehicleInformation['registeredOwnerStreet'],
+  registeredOwnerCity: VehicleInformation['registeredOwnerCity'],
+  registeredOwnerCountry: VehicleInformation['registeredOwnerCountry'],
+  registeredOwnerProvince: VehicleInformation['registeredOwnerProvince'],
+  registeredOwnerPostalCode: VehicleInformation['registeredOwnerPostalCode'],
+  actualOwnerStreet: VehicleInformation['actualOwnerStreet'],
+  actualOwnerCity: VehicleInformation['actualOwnerCity'],
+  actualOwnerCountry: VehicleInformation['actualOwnerCountry'],
+  actualOwnerProvince: VehicleInformation['actualOwnerProvince'],
+  actualOwnerPostalCode: VehicleInformation['actualOwnerPostalCode'],
   province: VehicleInformation['province'],
   make: VehicleInformation['make'],
   year: VehicleInformation['year'],
@@ -209,8 +250,16 @@ export async function insertVehicleRow(
       licensePlateNo,
       registeredOwner,
       actualOwner,
-      addressRegisteredOwner,
-      addressActualOwner,
+      registeredOwnerStreet,
+      registeredOwnerCity,
+      registeredOwnerCountry,
+      registeredOwnerProvince,
+      registeredOwnerPostalCode,
+      actualOwnerStreet,
+      actualOwnerCity,
+      actualOwnerCountry,
+      actualOwnerProvince,
+      actualOwnerPostalCode,
       province,
       make,
       year,
@@ -221,12 +270,15 @@ export async function insertVehicleRow(
   });
 
   let policyId = 0;
-  getPolicyByUsernameAndPolicyNumber(insurerName, policyNumber).then((insurancePolicy) => {
-    if (insurancePolicy) {
+  await getPolicyByUsernameAndPolicyNumber(insurerName, policyNumber).then((insurancePolicy) => {
+    //console.log(insurancePolicy, 'is insurancePolicy'); //<==TODO 0
+    if (insurancePolicy !== null) {
       policyId = insurancePolicy.policyId;
+      //console.log(policyId, ' is policyId'); //<==TODO  null
+      //console.log(insurancePolicy.policyId, ' is insurancePolicy.policyId'); //<==TODO PrismaClientKnownRequestError:
     }
   });
-
+  //console.log(policyId, 'is policyId agian'); //<==TODO 0
   await prisma.vehiclePolicy.create({
     data: {
       policyId,
@@ -240,23 +292,31 @@ export async function insertVehicleRow(
 export async function getVehicleBylicensePlateNo(
   licensePlateNo: VehicleInformation['licensePlateNo']
 ) {
-  return prisma.vehicleInformation.findUnique({
+  return await prisma.vehicleInformation.findUnique({
     where: { licensePlateNo },
   });
 }
 
 export async function updateVehicleRow(
   licensePlateNo: VehicleInformation['licensePlateNo'],
-  registeredOwner: VehicleInformation['registeredOwner'],
-  actualOwner: VehicleInformation['actualOwner'],
-  addressRegisteredOwner: VehicleInformation['addressRegisteredOwner'],
-  addressActualOwner: VehicleInformation['addressActualOwner'],
-  province: VehicleInformation['province'],
-  make: VehicleInformation['make'],
-  year: VehicleInformation['year'],
-  model: VehicleInformation['model'],
-  type: VehicleInformation['type'],
-  VIN: VehicleInformation['VIN']
+  registeredOwner?: VehicleInformation['registeredOwner'],
+  actualOwner?: VehicleInformation['actualOwner'],
+  registeredOwnerStreet?: VehicleInformation['registeredOwnerStreet'],
+  registeredOwnerCity?: VehicleInformation['registeredOwnerCity'],
+  registeredOwnerCountry?: VehicleInformation['registeredOwnerCountry'],
+  registeredOwnerProvince?: VehicleInformation['registeredOwnerProvince'],
+  registeredOwnerPostalCode?: VehicleInformation['registeredOwnerPostalCode'],
+  actualOwnerStreet?: VehicleInformation['actualOwnerStreet'],
+  actualOwnerCity?: VehicleInformation['actualOwnerCity'],
+  actualOwnerCountry?: VehicleInformation['actualOwnerCountry'],
+  actualOwnerProvince?: VehicleInformation['actualOwnerProvince'],
+  actualOwnerPostalCode?: VehicleInformation['actualOwnerPostalCode'],
+  province?: VehicleInformation['province'],
+  make?: VehicleInformation['make'],
+  year?: VehicleInformation['year'],
+  model?: VehicleInformation['model'],
+  type?: VehicleInformation['type'],
+  VIN?: VehicleInformation['VIN']
 ) {
   // Do the update
   await prisma.vehicleInformation.update({
@@ -265,8 +325,16 @@ export async function updateVehicleRow(
       licensePlateNo,
       registeredOwner,
       actualOwner,
-      addressRegisteredOwner,
-      addressActualOwner,
+      registeredOwnerStreet,
+      registeredOwnerCity,
+      registeredOwnerCountry,
+      registeredOwnerProvince,
+      registeredOwnerPostalCode,
+      actualOwnerStreet,
+      actualOwnerCity,
+      actualOwnerCountry,
+      actualOwnerProvince,
+      actualOwnerPostalCode,
       province,
       make,
       year,
@@ -282,7 +350,7 @@ export async function updateVehicleRow(
 export async function deleteVehicleBylicensePlateNo(
   licensePlateNo: VehicleInformation['licensePlateNo']
 ) {
-  return prisma.vehicleInformation.delete({
+  return await prisma.vehicleInformation.delete({
     where: { licensePlateNo },
   });
 }

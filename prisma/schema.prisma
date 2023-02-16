@@ -13,7 +13,7 @@ model User {
   email              String
   dob                DateTime
   disabilities       String?
-  yearsDriving       DateTime
+  yearsDriving       Int
   homeStreet         String
   homeCity           String
   homeCountry        String
@@ -61,22 +61,22 @@ model VehicleInformation {
   licensePlateNo            String          @id
   registeredOwner           String
   actualOwner               String
-  RegisteredOwnerStreet     String
-  RegisteredOwnerCity       String
-  RegisteredOwnerCountry    String
-  RegisteredOwnerProvince   String
-  RegisteredOwnerPostalCode String
-  ActualOwnerStreet         String
-  ActualOwnerCity           String
-  ActualOwnerCountry        String
-  ActualOwnerProvince       String
-  ActualOwnerPostalCode     String
+  registeredOwnerStreet     String
+  registeredOwnerCity       String
+  registeredOwnerCountry    String
+  registeredOwnerProvince   String
+  registeredOwnerPostalCode String
+  actualOwnerStreet         String
+  actualOwnerCity           String
+  actualOwnerCountry        String
+  actualOwnerProvince       String
+  actualOwnerPostalCode     String
   province                  String
   make                      String
   year                      Int
   model                     String
   type                      String
-  VIN                       Int
+  VIN                       String
   Vehicle_Policy            VehiclePolicy[]
 }
 
