@@ -269,22 +269,26 @@ export async function insertVehicleRow(
     },
   });
 
-  let policyId = 0;
+  let policyId = -1;
   await getPolicyByUsernameAndPolicyNumber(insurerName, policyNumber).then((insurancePolicy) => {
-    //console.log(insurancePolicy, 'is insurancePolicy'); //<==TODO 0
     if (insurancePolicy !== null) {
-      policyId = insurancePolicy.policyId;
-      //console.log(policyId, ' is policyId'); //<==TODO  null
-      //console.log(insurancePolicy.policyId, ' is insurancePolicy.policyId'); //<==TODO PrismaClientKnownRequestError:
+      policyId = insurancePolicy['policyId'];
+      console.log(policyId, ' is policyId');
     }
   });
-  //console.log(policyId, 'is policyId agian'); //<==TODO 0
-  await prisma.vehiclePolicy.create({
-    data: {
-      policyId,
+  if (policyId == -1) {
+    console.log(
       licensePlateNo,
-    },
-  });
+      'does not have a VehiclePolicy bridge table due to getPolicyByUsernameAndPolicyNumber not finding a row.'
+    );
+  } else {
+    await prisma.vehiclePolicy.create({
+      data: {
+        policyId,
+        licensePlateNo,
+      },
+    });
+  }
 
   console.log(licensePlateNo, 'is added to the VehicleInformation table.');
 }
