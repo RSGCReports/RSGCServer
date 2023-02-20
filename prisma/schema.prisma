@@ -52,7 +52,7 @@ model InsurancePolicy {
   businessCountry    String?
   businessProvince   String?
   businessPostalCode String?
-  policyNumber       Int
+  policyNumber       String
   PolicyClient       PolicyClient[]
   Vehicle_Policy     VehiclePolicy[]
 }
