@@ -8,25 +8,28 @@ datasource db {
 }
 
 model User {
-  username           String            @id
-  fullname           String
-  email              String
-  dob                DateTime
-  disabilities       String?
-  yearsDriving       Int
-  homeStreet         String
-  homeCity           String
-  homeCountry        String
-  homeProvince       String
-  homePostalCode     String
-  businessStreet     String?
-  businessCity       String?
-  businessCountry    String?
-  businessProvince   String?
-  businessPostalCode String?
-  phoneNumber        String
-  driverLicense      String
-  PolicyClient       PolicyClient[]
+  username             String               @id
+  fullname             String?
+  email                String?
+  dob                  DateTime?
+  disabilities         String?
+  yearsDriving         Int?
+  homeStreet           String?
+  homeCity             String?
+  homeCountry          String?
+  homeProvince         String?
+  homePostalCode       String?
+  businessStreet       String?
+  businessCity         String?
+  businessCountry      String?
+  businessProvince     String?
+  businessPostalCode   String?
+  phoneNumber          String?
+  driverLicense        String?
+  isAdmin              Boolean              @default(false)
+  PolicyClient         PolicyClient[]
+  Report_Personal_Info ReportPersonalInfo[]
+  Report               Report[]
 }
 
 model PolicyClient {
@@ -38,7 +41,7 @@ model PolicyClient {
 }
 
 model InsurancePolicy {
-  policyId           Int             @id @default(autoincrement())
+  policyId           Int               @id @default(autoincrement())
   insurer            String
   insurerName        String
   Agent              String
@@ -55,10 +58,11 @@ model InsurancePolicy {
   policyNumber       String
   PolicyClient       PolicyClient[]
   Vehicle_Policy     VehiclePolicy[]
+  Report_Insurance   ReportInsurance[]
 }
 
 model VehicleInformation {
-  licensePlateNo            String          @id
+  licensePlateNo            String           @id
   registeredOwner           String
   actualOwner               String
   registeredOwnerStreet     String
@@ -78,6 +82,7 @@ model VehicleInformation {
   type                      String
   VIN                       String
   Vehicle_Policy            VehiclePolicy[]
+  VehicleWitness            VehicleWitness[]
 }
 
 model VehiclePolicy {
@@ -86,4 +91,140 @@ model VehiclePolicy {
   licensePlateNo     String
   VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
   InsurancePolicy    InsurancePolicy    @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
+}
+
+model Report {
+  reportId            Int                   @id @default(autoincrement())
+  dayTime             DateTime
+  dayLight            DayLight
+  roadCondition       String
+  weatherCondition    String
+  location            String
+  accidentDescription String
+  comment             String
+  flag                String
+  adminComments       String
+  speed               String
+  direction           String
+  purposeForUsage     String
+  damageDescription   String?
+  EstimateOfDamage    Severity
+  Admin               User[]
+  PersonInjured       personInjured[]
+  PoliceInvestigation PoliceInvestigation[]
+  Witness             Witness[]
+  Evidence            Evidence[]
+  Insurance           ReportInsurance[]
+  PersonalInfo        ReportPersonalInfo[]
+}
+
+model personInjured {
+  id               Int      @id @default(autoincrement())
+  name             String
+  phone            String
+  street           String
+  city             String
+  country          String
+  province         String
+  postalCode       String
+  dob              DateTime
+  hospital         String
+  natureOfInjuries String
+  reportId         Int
+  Report           Report   @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+}
+
+model PoliceInvestigation {
+  id                      Int     @id @default(autoincrement())
+  officerName             String
+  officerNumber           String?
+  drugs                   String
+  collisionCentreLocation String
+  partyResponsible        String
+  charges                 String
+  reportId                Int
+  Report                  Report  @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+}
+
+model Witness {
+  id         Int              @id @default(autoincrement())
+  name       String
+  phone      String
+  street     String
+  city       String
+  country    String
+  province   String
+  postalCode String
+  whichCar   VehicleWitness[]
+  reportId   Int
+  Report     Report           @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+}
+
+model VehicleWitness {
+  id                 Int                @id @default(autoincrement())
+  witnessId          Int
+  licensePlateNo     String
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
+  Witness            Witness            @relation(fields: [witnessId], references: [id], onDelete: Cascade)
+}
+
+model Evidence {
+  id       Int    @id @default(autoincrement())
+  name     String
+  data     Bytes
+  reportId Int
+  Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+}
+
+model PropertyDamage {
+  id                  Int      @id @default(autoincrement())
+  nameOwner           String
+  phoneOwner          String
+  ownerStreet         String
+  ownerCity           String
+  ownerCountry        String
+  ownerProvince       String
+  ownerPostalCode     String
+  licenseNumberOwner  String
+  ownerProvIssue      String
+  yearOfVehicle       DateTime
+  nameInsurer         String
+  policyNumber        String
+  nameDriver          String
+  phoneDriver         String
+  driverStreet        String
+  driverCity          String
+  driverCountry       String
+  driverProvince      String
+  driverPostalCode    String
+  driverLicenseNumber String
+  driverProvIssue     String
+}
+
+model ReportInsurance {
+  id              Int             @id @default(autoincrement())
+  policyId        Int
+  reportId        Int
+  Report          Report          @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
+}
+
+model ReportPersonalInfo {
+  id       Int    @id @default(autoincrement())
+  username String
+  reportId Int
+  Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  User     User   @relation(fields: [username], references: [username], onDelete: Cascade)
+}
+
+enum DayLight {
+  dark
+  dayLight
+  dusk
+}
+
+enum Severity {
+  minor
+  medium
+  major
 }
