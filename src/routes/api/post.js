@@ -1,5 +1,5 @@
 const logger = require('../../logger');
-// const prisma = require('../../../prisma/prismaFunction.ts');
+const { insertUserRow } = require('../../../prisma/prismaFunction.js');
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
@@ -20,29 +20,50 @@ module.exports = async (req, res) => {
       const insurancePolicy = req.body.completeProfile.insurancePolicy;
       const vehicleInfo = req.body.completeProfile.vehicleInfo;
 
+      const createdUser = insertUserRow(
+        user.username,
+        user.fullname,
+        user.email,
+        new Date(user.dob),
+        parseInt(user.yearsDriving),
+        user.homeStreet,
+        user.homeCity,
+        user.homeProvince,
+        user.homeCountry,
+        user.homePostalCode,
+        user.phoneNumber,
+        user.driverLicense,
+        user.businessStreet,
+        user.businessCity,
+        user.businessProvince,
+        user.businessCountry,
+        user.businessPostalCode,
+        user.disabilities
+      );
+
       // const createdUser = await prisma.insertUserRow({ user });
-      const createdUser = await prisma.user.create({
-        data: {
-          username: user.username,
-          fullname: user.fullname,
-          email: user.email,
-          dob: new Date(user.dob),
-          disabilities: user.disabilities,
-          yearsDriving: parseInt(user.yearsDriving),
-          homeStreet: user.homeStreet,
-          homeCity: user.homeCity,
-          homeProvince: user.homeProvince,
-          homeCountry: user.homeCountry,
-          homePostalCode: user.homePostalCode,
-          businessStreet: user.businessStreet,
-          businessCity: user.businessCity,
-          businessProvince: user.businessProvince,
-          businessCountry: user.businessCountry,
-          businessPostalCode: user.businessPostalCode,
-          phoneNumber: user.phoneNumber,
-          driverLicense: user.driverLicense,
-        },
-      });
+      // const createdUser = await prisma.user.create({
+      //   data: {
+      //     username: user.username,
+      //     fullname: user.fullname,
+      //     email: user.email,
+      //     dob: new Date(user.dob),
+      //     disabilities: user.disabilities,
+      //     yearsDriving: parseInt(user.yearsDriving),
+      //     homeStreet: user.homeStreet,
+      //     homeCity: user.homeCity,
+      //     homeProvince: user.homeProvince,
+      //     homeCountry: user.homeCountry,
+      //     homePostalCode: user.homePostalCode,
+      //     businessStreet: user.businessStreet,
+      //     businessCity: user.businessCity,
+      //     businessProvince: user.businessProvince,
+      //     businessCountry: user.businessCountry,
+      //     businessPostalCode: user.businessPostalCode,
+      //     phoneNumber: user.phoneNumber,
+      //     driverLicense: user.driverLicense,
+      //   },
+      // });
       // const createdInsurancePolicy = await prisma.insertPolicyRow({ insurancePolicy });
       const createdInsurancePolicy = await prisma.insurancePolicy.create({
         data: {
