@@ -1,3 +1,7 @@
+## TSC Command
+
+`tsc <tsfilename>` to compile ts files to js so they can be imported and used by other js files
+
 ## Prisma Commands
 
 `npx prisma db pull` to pull database tables into your schema file.
