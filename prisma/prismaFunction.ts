@@ -1,4 +1,19 @@
-import { InsurancePolicy, PrismaClient, User, VehicleInformation } from '@prisma/client';
+import {
+  Evidence,
+  InsurancePolicy,
+  personInjured,
+  PrismaClient,
+  Report,
+  User,
+  VehicleInformation,
+  Witness,
+  PoliceInvestigation,
+  ReportInsurance,
+  ReportPersonalInfo,
+  ReportVehicleInfo,
+  VehicleWitness,
+  PropertyDamage,
+} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -356,6 +371,198 @@ export async function deleteVehicleBylicensePlateNo(
 ) {
   return await prisma.vehicleInformation.delete({
     where: { licensePlateNo },
+  });
+}
+
+// ====CRUD for report====
+/* This accepts attributes of report, including:
+   - policyId for InsurancePolicy
+   - username of the user
+   - licensePlateNo of the user
+   - an array of PersonInjured
+   - an array of Evidence
+   - an array of PropertyDamage
+
+This returns the id of the report.*/
+export async function insertReportRow(
+  dayTime: Report['dayTime'],
+  dayLight: Report['dayLight'],
+  roadCondition: Report['roadCondition'],
+  weatherCondition: Report['weatherCondition'],
+  location: Report['location'],
+  accidentDescription: Report['accidentDescription'],
+  comment: Report['comment'],
+  flag: Report['flag'],
+  adminComments: Report['adminComments'],
+  speed: Report['speed'],
+  direction: Report['direction'],
+  purposeForUsage: Report['purposeForUsage'],
+  EstimateOfDamage: Report['EstimateOfDamage'],
+  AdminId: Report['AdminId'],
+  policyId: InsurancePolicy['policyId'],
+  username: User['username'],
+  licensePlateNo: VehicleInformation['licensePlateNo'],
+  damageDescription?: Report['damageDescription'],
+  PersonInjured?: personInjured[],
+  Evidence?: Evidence[],
+  PropertyDamage?: PropertyDamage[]
+) {
+  const { reportId } = await prisma.report.create({
+    data: {
+      dayTime,
+      dayLight,
+      roadCondition,
+      weatherCondition,
+      location,
+      accidentDescription,
+      comment,
+      flag,
+      adminComments,
+      speed,
+      direction,
+      purposeForUsage,
+      damageDescription,
+      EstimateOfDamage,
+      AdminId,
+      Insurance: { create: [{ policyId }] },
+      PersonalInfo: { create: [{ username }] },
+      VehicleInfo: { create: [{ licensePlateNo }] },
+    },
+  });
+
+  if (PersonInjured && PersonInjured.length > 0) {
+    PersonInjured.forEach(async (element: personInjured) => {
+      await prisma.personInjured.create({
+        data: {
+          name: element.name,
+          phone: element.phone,
+          street: element.street,
+          city: element.city,
+          country: element.country,
+          province: element.province,
+          postalCode: element.postalCode,
+          dob: element.dob,
+          hospital: element.hospital,
+          natureOfInjuries: element.natureOfInjuries,
+          reportId,
+        },
+      });
+    });
+  }
+
+  if (PropertyDamage && PropertyDamage.length > 0) {
+    PropertyDamage.forEach(async (element: PropertyDamage) => {
+      await prisma.propertyDamage.create({
+        data: {
+          nameOwner: element.nameOwner,
+          phoneOwner: element.phoneOwner,
+          ownerStreet: element.ownerStreet,
+          ownerCity: element.ownerCity,
+          ownerCountry: element.ownerCountry,
+          ownerProvince: element.ownerProvince,
+          ownerPostalCode: element.ownerPostalCode,
+          licenseNumberOwner: element.licenseNumberOwner,
+          ownerProvIssue: element.ownerProvIssue,
+          yearOfVehicle: element.yearOfVehicle,
+          nameInsurer: element.nameInsurer,
+          policyNumber: element.policyNumber,
+          nameDriver: element.nameDriver,
+          phoneDriver: element.phoneDriver,
+          driverStreet: element.driverStreet,
+          driverCity: element.driverCity,
+          driverCountry: element.driverCountry,
+          driverProvince: element.driverProvince,
+          driverPostalCode: element.driverPostalCode,
+          driverLicenseNumber: element.driverLicenseNumber,
+          driverProvIssue: element.driverProvIssue,
+          reportId,
+        },
+      });
+    });
+  }
+
+  if (Evidence && Evidence.length > 0) {
+    Evidence.forEach(async (element: Evidence) => {
+      await prisma.evidence.create({
+        data: {
+          name: element.name,
+          data: element.data,
+          reportId,
+        },
+      });
+    });
+  }
+
+  console.log(reportId, 'is added to the Report table.');
+
+  return reportId;
+}
+
+export async function deleteReportById(reportId: Report['reportId']) {
+  return await prisma.report.delete({
+    where: { reportId },
+  });
+}
+
+// This accepts report id, attributes of Witness, and a VehicleWitness to add the car they were on.
+// This returns the id of the witness.
+export async function addWitnessToReport(
+  reportId: Report['reportId'],
+  name: Witness['name'],
+  phone: Witness['phone'],
+  street: Witness['street'],
+  city: Witness['city'],
+  country: Witness['country'],
+  province: Witness['province'],
+  postalCode: Witness['postalCode'],
+  whichCar?: VehicleWitness
+) {
+  const { id } = await prisma.witness.create({
+    data: {
+      name,
+      phone,
+      street,
+      city,
+      country,
+      province,
+      postalCode,
+      reportId,
+    },
+  });
+
+  if (whichCar) {
+    await prisma.vehicleWitness.create({
+      data: {
+        witnessId: whichCar.witnessId,
+        licensePlateNo: whichCar.licensePlateNo,
+      },
+    });
+  }
+
+  return id;
+}
+
+// This accepts report id, and attributes of PoliceInvestigation.
+// This returns the id of the investigation.
+export async function addPoliceInvestigation(
+  reportId: Report['reportId'],
+  officerName: PoliceInvestigation['officerName'],
+  officerNumber: PoliceInvestigation['officerNumber'],
+  drugs: PoliceInvestigation['drugs'],
+  collisionCentreLocation: PoliceInvestigation['collisionCentreLocation'],
+  partyResponsible: PoliceInvestigation['partyResponsible'],
+  charges: PoliceInvestigation['charges']
+) {
+  return await prisma.policeInvestigation.create({
+    data: {
+      officerName,
+      officerNumber,
+      drugs,
+      collisionCentreLocation,
+      partyResponsible,
+      charges,
+      reportId,
+    },
   });
 }
 
