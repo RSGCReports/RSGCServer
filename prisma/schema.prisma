@@ -29,7 +29,7 @@ model User {
   isAdmin              Boolean              @default(false)
   PolicyClient         PolicyClient[]
   Report_Personal_Info ReportPersonalInfo[]
-  Report               Report[]
+  ReportReviewed       Report[]
 }
 
 model PolicyClient {
@@ -62,7 +62,7 @@ model InsurancePolicy {
 }
 
 model VehicleInformation {
-  licensePlateNo            String           @id
+  licensePlateNo            String              @id
   registeredOwner           String
   actualOwner               String
   registeredOwnerStreet     String
@@ -83,6 +83,7 @@ model VehicleInformation {
   VIN                       String
   Vehicle_Policy            VehiclePolicy[]
   VehicleWitness            VehicleWitness[]
+  Report_VehicleInfo        ReportVehicleInfo[]
 }
 
 model VehiclePolicy {
@@ -109,13 +110,16 @@ model Report {
   purposeForUsage     String
   damageDescription   String?
   EstimateOfDamage    Severity
-  Admin               User[]
+  AdminId             String?
   PersonInjured       personInjured[]
   PoliceInvestigation PoliceInvestigation[]
   Witness             Witness[]
   Evidence            Evidence[]
   Insurance           ReportInsurance[]
   PersonalInfo        ReportPersonalInfo[]
+  VehicleInfo         ReportVehicleInfo[]
+  PropertyDamage      PropertyDamage[]
+  Admin               User?                 @relation(fields: [AdminId], references: [username], onDelete: Cascade)
 }
 
 model personInjured {
@@ -199,6 +203,8 @@ model PropertyDamage {
   driverPostalCode    String
   driverLicenseNumber String
   driverProvIssue     String
+  reportId            Int
+  Report              Report   @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
 }
 
 model ReportInsurance {
@@ -215,6 +221,14 @@ model ReportPersonalInfo {
   reportId Int
   Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
   User     User   @relation(fields: [username], references: [username], onDelete: Cascade)
+}
+
+model ReportVehicleInfo {
+  id                 Int                @id @default(autoincrement())
+  reportId           Int
+  licensePlateNo     String
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
+  Report             Report             @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
 }
 
 enum DayLight {

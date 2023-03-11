@@ -10,6 +10,12 @@ async function main() {
   await prisma.vehicleInformation.deleteMany().catch(() => {});
   await prisma.vehiclePolicy.deleteMany().catch(() => {});
 
+  await prisma.report.deleteMany().catch(() => {});
+  await prisma.reportInsurance.deleteMany().catch(() => {});
+  await prisma.reportPersonalInfo.deleteMany().catch(() => {});
+  await prisma.vehicleWitness.deleteMany().catch(() => {});
+  await prisma.reportVehicleInfo.deleteMany().catch(() => {});
+
   await insertUserRow(
     'user1',
     'John Smith',
@@ -40,7 +46,7 @@ async function main() {
     'ON',
     'CA',
     'J1D 0I3',
-    465461656,
+    '465461656',
     'user1',
     '58 York',
     'Toronto',
@@ -70,7 +76,7 @@ async function main() {
     'Personal',
     '8G5HJUS68J5260025',
     'John Smith',
-    465461656
+    '465461656'
   );
 }
 
