@@ -286,6 +286,7 @@ export async function insertVehicleRow(
 
   let policyId = -1;
   await getPolicyByUsernameAndPolicyNumber(insurerName, policyNumber).then((insurancePolicy) => {
+    console.log(insurerName, policyNumber);
     if (insurancePolicy !== null) {
       policyId = insurancePolicy['policyId'];
       console.log(policyId, ' is policyId');
