@@ -1,26 +1,21 @@
 const logger = require('../../logger');
-const { insertUserRow } = require('../../../prisma/prismaFunction.js');
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const {
+  insertUserRow,
+  insertPolicyRow,
+  insertVehicleRow,
+} = require('../../../prisma/prismaFunction.js');
 
 module.exports = async (req, res) => {
   try {
-    // log the body
-    let body = req.body;
-    console.log(body);
-    logger.debug({ body }, 'This is the body');
-
     // check form validity
     if (registrationValidation(req.body.completeProfile)) {
       //Create the user, the policy and the vehicle info from validated completeProfile
 
       const user = req.body.completeProfile.user;
-      console.log('Do we get to the DB stuff?');
       const insurancePolicy = req.body.completeProfile.insurancePolicy;
       const vehicleInfo = req.body.completeProfile.vehicleInfo;
 
-      const createdUser = insertUserRow(
+      const createdUser = await insertUserRow(
         user.username,
         user.fullname,
         user.email,
@@ -41,72 +36,47 @@ module.exports = async (req, res) => {
         user.disabilities
       );
 
-      // const createdUser = await prisma.insertUserRow({ user });
-      // const createdUser = await prisma.user.create({
-      //   data: {
-      //     username: user.username,
-      //     fullname: user.fullname,
-      //     email: user.email,
-      //     dob: new Date(user.dob),
-      //     disabilities: user.disabilities,
-      //     yearsDriving: parseInt(user.yearsDriving),
-      //     homeStreet: user.homeStreet,
-      //     homeCity: user.homeCity,
-      //     homeProvince: user.homeProvince,
-      //     homeCountry: user.homeCountry,
-      //     homePostalCode: user.homePostalCode,
-      //     businessStreet: user.businessStreet,
-      //     businessCity: user.businessCity,
-      //     businessProvince: user.businessProvince,
-      //     businessCountry: user.businessCountry,
-      //     businessPostalCode: user.businessPostalCode,
-      //     phoneNumber: user.phoneNumber,
-      //     driverLicense: user.driverLicense,
-      //   },
-      // });
-      // const createdInsurancePolicy = await prisma.insertPolicyRow({ insurancePolicy });
-      const createdInsurancePolicy = await prisma.insurancePolicy.create({
-        data: {
-          insurer: insurancePolicy.insurer,
-          insurerName: insurancePolicy.insurerName,
-          Agent: insurancePolicy.Agent,
-          homeStreet: insurancePolicy.homeStreet,
-          homeCity: insurancePolicy.homeCity,
-          homeCountry: insurancePolicy.homeCountry,
-          homeProvince: insurancePolicy.homeProvince,
-          homePostalCode: insurancePolicy.homePostalCode,
-          businessStreet: insurancePolicy.businessStreet,
-          businessCity: insurancePolicy.businessCity,
-          businessCountry: insurancePolicy.businessCountry,
-          businessProvince: insurancePolicy.businessProvince,
-          businessPostalCode: insurancePolicy.businessPostalCode,
-          policyNumber: insurancePolicy.policyNumber,
-        },
-      });
-      // const createdVehicleInfo = await prisma.insertVehicleRow({ vehicleInfo });
-      const createdVehicleInfo = await prisma.vehicleInformation.create({
-        data: {
-          licensePlateNo: vehicleInfo.licensePlateNo,
-          registeredOwner: vehicleInfo.registeredOwner,
-          actualOwner: vehicleInfo.actualOwner,
-          registeredOwnerStreet: vehicleInfo.RegisteredOwnerStreet,
-          registeredOwnerCity: vehicleInfo.RegisteredOwnerCity,
-          registeredOwnerCountry: vehicleInfo.RegisteredOwnerCountry,
-          registeredOwnerProvince: vehicleInfo.RegisteredOwnerProvince,
-          registeredOwnerPostalCode: vehicleInfo.RegisteredOwnerPostalCode,
-          actualOwnerStreet: vehicleInfo.ActualOwnerStreet,
-          actualOwnerCity: vehicleInfo.ActualOwnerCity,
-          actualOwnerCountry: vehicleInfo.ActualOwnerCountry,
-          actualOwnerProvince: vehicleInfo.ActualOwnerProvince,
-          actualOwnerPostalCode: vehicleInfo.ActualOwnerPostalCode,
-          province: vehicleInfo.province,
-          make: vehicleInfo.make,
-          year: parseInt(vehicleInfo.year),
-          model: vehicleInfo.model,
-          type: vehicleInfo.type,
-          VIN: vehicleInfo.VIN,
-        },
-      });
+      const createdInsurancePolicy = await insertPolicyRow(
+        insurancePolicy.insurer,
+        insurancePolicy.insurerName,
+        insurancePolicy.Agent,
+        insurancePolicy.homeStreet,
+        insurancePolicy.homeCity,
+        insurancePolicy.homeCountry,
+        insurancePolicy.homeProvince,
+        insurancePolicy.homePostalCode,
+        insurancePolicy.policyNumber,
+        user.username,
+        insurancePolicy.businessStreet,
+        insurancePolicy.businessCity,
+        insurancePolicy.businessCountry,
+        insurancePolicy.businessProvince,
+        insurancePolicy.businessPostalCode
+      );
+
+      const createdVehicleInfo = await insertVehicleRow(
+        vehicleInfo.licensePlateNo,
+        vehicleInfo.registeredOwner,
+        vehicleInfo.actualOwner,
+        vehicleInfo.RegisteredOwnerStreet,
+        vehicleInfo.RegisteredOwnerCity,
+        vehicleInfo.RegisteredOwnerCountry,
+        vehicleInfo.RegisteredOwnerProvince,
+        vehicleInfo.RegisteredOwnerPostalCode,
+        vehicleInfo.ActualOwnerStreet,
+        vehicleInfo.ActualOwnerCity,
+        vehicleInfo.ActualOwnerCountry,
+        vehicleInfo.ActualOwnerProvince,
+        vehicleInfo.ActualOwnerPostalCode,
+        vehicleInfo.province,
+        vehicleInfo.make,
+        parseInt(vehicleInfo.year),
+        vehicleInfo.model,
+        vehicleInfo.type,
+        vehicleInfo.VIN,
+        insurancePolicy.insurerName,
+        insurancePolicy.policyNumber
+      );
 
       console.log(createdUser);
       console.log(createdInsurancePolicy);

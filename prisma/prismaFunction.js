@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.deleteVehicleBylicensePlateNo = exports.updateVehicleRow = exports.getVehicleBylicensePlateNo = exports.insertVehicleRow = exports.deletePolicyByUsername = exports.updatePolicyRow = exports.getPolicyByUsernameAndPolicyNumber = exports.insertPolicyRow = exports.deleteUserByUsername = exports.updateUserRow = exports.getUserByUsername = exports.insertUserRow = void 0;
+exports.addPoliceInvestigation = exports.addWitnessToReport = exports.deleteReportById = exports.insertReportRow = exports.deleteVehicleBylicensePlateNo = exports.updateVehicleRow = exports.getVehicleBylicensePlateNo = exports.insertVehicleRow = exports.deletePolicyByUsername = exports.updatePolicyRow = exports.getPolicyByUsernameAndPolicyNumber = exports.insertPolicyRow = exports.deleteUserByUsername = exports.updateUserRow = exports.getUserByUsername = exports.insertUserRow = void 0;
 var client_1 = require("@prisma/client");
 var prisma = new client_1.PrismaClient();
 // ====CRUD for User====
@@ -277,6 +277,7 @@ function insertVehicleRow(licensePlateNo, registeredOwner, actualOwner, register
                     _a.sent();
                     policyId = -1;
                     return [4 /*yield*/, getPolicyByUsernameAndPolicyNumber(insurerName, policyNumber).then(function (insurancePolicy) {
+                            console.log(insurerName, policyNumber);
                             if (insurancePolicy !== null) {
                                 policyId = insurancePolicy['policyId'];
                                 console.log(policyId, ' is policyId');
@@ -370,6 +371,207 @@ function deleteVehicleBylicensePlateNo(licensePlateNo) {
     });
 }
 exports.deleteVehicleBylicensePlateNo = deleteVehicleBylicensePlateNo;
+// ====CRUD for report====
+/* This accepts attributes of report, including:
+   - policyId for InsurancePolicy
+   - username of the user
+   - licensePlateNo of the user
+   - an array of PersonInjured
+   - an array of Evidence
+   - an array of PropertyDamage
+
+This returns the id of the report.*/
+function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, location, accidentDescription, comment, flag, adminComments, speed, direction, purposeForUsage, EstimateOfDamage, AdminId, policyId, username, licensePlateNo, damageDescription, PersonInjured, Evidence, PropertyDamage) {
+    return __awaiter(this, void 0, void 0, function () {
+        var reportId;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.report.create({
+                        data: {
+                            dayTime: dayTime,
+                            dayLight: dayLight,
+                            roadCondition: roadCondition,
+                            weatherCondition: weatherCondition,
+                            location: location,
+                            accidentDescription: accidentDescription,
+                            comment: comment,
+                            flag: flag,
+                            adminComments: adminComments,
+                            speed: speed,
+                            direction: direction,
+                            purposeForUsage: purposeForUsage,
+                            damageDescription: damageDescription,
+                            EstimateOfDamage: EstimateOfDamage,
+                            AdminId: AdminId,
+                            Insurance: { create: [{ policyId: policyId }] },
+                            PersonalInfo: { create: [{ username: username }] },
+                            VehicleInfo: { create: [{ licensePlateNo: licensePlateNo }] }
+                        }
+                    })];
+                case 1:
+                    reportId = (_a.sent()).reportId;
+                    if (PersonInjured && PersonInjured.length > 0) {
+                        PersonInjured.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, prisma.personInjured.create({
+                                            data: {
+                                                name: element.name,
+                                                phone: element.phone,
+                                                street: element.street,
+                                                city: element.city,
+                                                country: element.country,
+                                                province: element.province,
+                                                postalCode: element.postalCode,
+                                                dob: element.dob,
+                                                hospital: element.hospital,
+                                                natureOfInjuries: element.natureOfInjuries,
+                                                reportId: reportId
+                                            }
+                                        })];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                    }
+                    if (PropertyDamage && PropertyDamage.length > 0) {
+                        PropertyDamage.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, prisma.propertyDamage.create({
+                                            data: {
+                                                nameOwner: element.nameOwner,
+                                                phoneOwner: element.phoneOwner,
+                                                ownerStreet: element.ownerStreet,
+                                                ownerCity: element.ownerCity,
+                                                ownerCountry: element.ownerCountry,
+                                                ownerProvince: element.ownerProvince,
+                                                ownerPostalCode: element.ownerPostalCode,
+                                                licenseNumberOwner: element.licenseNumberOwner,
+                                                ownerProvIssue: element.ownerProvIssue,
+                                                yearOfVehicle: element.yearOfVehicle,
+                                                nameInsurer: element.nameInsurer,
+                                                policyNumber: element.policyNumber,
+                                                nameDriver: element.nameDriver,
+                                                phoneDriver: element.phoneDriver,
+                                                driverStreet: element.driverStreet,
+                                                driverCity: element.driverCity,
+                                                driverCountry: element.driverCountry,
+                                                driverProvince: element.driverProvince,
+                                                driverPostalCode: element.driverPostalCode,
+                                                driverLicenseNumber: element.driverLicenseNumber,
+                                                driverProvIssue: element.driverProvIssue,
+                                                reportId: reportId
+                                            }
+                                        })];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                    }
+                    if (Evidence && Evidence.length > 0) {
+                        Evidence.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, prisma.evidence.create({
+                                            data: {
+                                                name: element.name,
+                                                data: element.data,
+                                                reportId: reportId
+                                            }
+                                        })];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                    }
+                    console.log(reportId, 'is added to the Report table.');
+                    return [2 /*return*/, reportId];
+            }
+        });
+    });
+}
+exports.insertReportRow = insertReportRow;
+function deleteReportById(reportId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.report["delete"]({
+                        where: { reportId: reportId }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deleteReportById = deleteReportById;
+// This accepts report id, attributes of Witness, and a VehicleWitness to add the car they were on.
+// This returns the id of the witness.
+function addWitnessToReport(reportId, name, phone, street, city, country, province, postalCode, whichCar) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.witness.create({
+                        data: {
+                            name: name,
+                            phone: phone,
+                            street: street,
+                            city: city,
+                            country: country,
+                            province: province,
+                            postalCode: postalCode,
+                            reportId: reportId
+                        }
+                    })];
+                case 1:
+                    id = (_a.sent()).id;
+                    if (!whichCar) return [3 /*break*/, 3];
+                    return [4 /*yield*/, prisma.vehicleWitness.create({
+                            data: {
+                                witnessId: whichCar.witnessId,
+                                licensePlateNo: whichCar.licensePlateNo
+                            }
+                        })];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3: return [2 /*return*/, id];
+            }
+        });
+    });
+}
+exports.addWitnessToReport = addWitnessToReport;
+// This accepts report id, and attributes of PoliceInvestigation.
+// This returns the id of the investigation.
+function addPoliceInvestigation(reportId, officerName, officerNumber, drugs, collisionCentreLocation, partyResponsible, charges) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.policeInvestigation.create({
+                        data: {
+                            officerName: officerName,
+                            officerNumber: officerNumber,
+                            drugs: drugs,
+                            collisionCentreLocation: collisionCentreLocation,
+                            partyResponsible: partyResponsible,
+                            charges: charges,
+                            reportId: reportId
+                        }
+                    })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.addPoliceInvestigation = addPoliceInvestigation;
 /** Add these after a fucntion when you wish to disconnect from databse, including when errors occur
   .then(async () => {
     await prisma.$disconnect();

@@ -19,7 +19,7 @@ module.exports.strategy = () =>
   new BearerStrategy(async (token, done) => {
     try {
       const user = await jwtVerifier.verify(token);
-      logger.debug({ user }, 'All good inside auth.js');
+      // logger.debug({ user }, 'All good inside auth.js');
       done(null, user['cognito:username']);
     } catch (err) {
       logger.error({ err, token }, "Something's wrong in auth.js");
