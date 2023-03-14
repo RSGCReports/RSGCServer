@@ -138,7 +138,7 @@ export async function insertPolicyRow(
   businessProvince?: InsurancePolicy['businessProvince'],
   businessPostalCode?: InsurancePolicy['businessPostalCode']
 ) {
-  await prisma.insurancePolicy.create({
+  const { policyId } = await prisma.insurancePolicy.create({
     data: {
       insurer,
       insurerName,
@@ -161,6 +161,7 @@ export async function insertPolicyRow(
   });
 
   console.log(policyNumber, 'is added to the InsurancePolicy table.');
+  return policyId;
 }
 
 export async function getPolicyByUsernameAndPolicyNumber(
@@ -173,15 +174,15 @@ export async function getPolicyByUsernameAndPolicyNumber(
 }
 
 export async function updatePolicyRow(
-  insurer: InsurancePolicy['insurer'],
   insurerName: InsurancePolicy['insurerName'],
-  Agent: InsurancePolicy['Agent'],
-  homeStreet: InsurancePolicy['homeStreet'],
-  homeCity: InsurancePolicy['homeCity'],
-  homeCountry: InsurancePolicy['homeCountry'],
-  homeProvince: InsurancePolicy['homeProvince'],
-  homePostalCode: InsurancePolicy['homePostalCode'],
   policyNumber: InsurancePolicy['policyNumber'],
+  Agent?: InsurancePolicy['Agent'],
+  homeStreet?: InsurancePolicy['homeStreet'],
+  homeCity?: InsurancePolicy['homeCity'],
+  homeCountry?: InsurancePolicy['homeCountry'],
+  homeProvince?: InsurancePolicy['homeProvince'],
+  homePostalCode?: InsurancePolicy['homePostalCode'],
+  insurer?: InsurancePolicy['insurer'],
   businessStreet?: InsurancePolicy['businessStreet'],
   businessCity?: InsurancePolicy['businessCity'],
   businessCountry?: InsurancePolicy['businessCountry'],
@@ -393,13 +394,10 @@ export async function insertReportRow(
   location: Report['location'],
   accidentDescription: Report['accidentDescription'],
   comment: Report['comment'],
-  flag: Report['flag'],
-  adminComments: Report['adminComments'],
   speed: Report['speed'],
   direction: Report['direction'],
   purposeForUsage: Report['purposeForUsage'],
   EstimateOfDamage: Report['EstimateOfDamage'],
-  AdminId: Report['AdminId'],
   policyId: InsurancePolicy['policyId'],
   username: User['username'],
   licensePlateNo: VehicleInformation['licensePlateNo'],
@@ -417,14 +415,11 @@ export async function insertReportRow(
       location,
       accidentDescription,
       comment,
-      flag,
-      adminComments,
       speed,
       direction,
       purposeForUsage,
       damageDescription,
       EstimateOfDamage,
-      AdminId,
       Insurance: { create: [{ policyId }] },
       PersonalInfo: { create: [{ username }] },
       VehicleInfo: { create: [{ licensePlateNo }] },
@@ -516,7 +511,7 @@ export async function addWitnessToReport(
   country: Witness['country'],
   province: Witness['province'],
   postalCode: Witness['postalCode'],
-  whichCar?: VehicleWitness
+  whichCar?: VehicleInformation['licensePlateNo']
 ) {
   const { id } = await prisma.witness.create({
     data: {
@@ -534,8 +529,8 @@ export async function addWitnessToReport(
   if (whichCar) {
     await prisma.vehicleWitness.create({
       data: {
-        witnessId: whichCar.witnessId,
-        licensePlateNo: whichCar.licensePlateNo,
+        witnessId: id,
+        licensePlateNo: whichCar,
       },
     });
   }
@@ -547,22 +542,12 @@ export async function addWitnessToReport(
 // This returns the id of the investigation.
 export async function addPoliceInvestigation(
   reportId: Report['reportId'],
-  officerName: PoliceInvestigation['officerName'],
-  officerNumber: PoliceInvestigation['officerNumber'],
-  drugs: PoliceInvestigation['drugs'],
-  collisionCentreLocation: PoliceInvestigation['collisionCentreLocation'],
-  partyResponsible: PoliceInvestigation['partyResponsible'],
-  charges: PoliceInvestigation['charges']
+  policeReportNo: PoliceInvestigation['policeReportNo']
 ) {
   return await prisma.policeInvestigation.create({
     data: {
-      officerName,
-      officerNumber,
-      drugs,
-      collisionCentreLocation,
-      partyResponsible,
-      charges,
       reportId,
+      policeReportNo,
     },
   });
 }

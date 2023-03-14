@@ -1,7 +1,14 @@
-import { insertUserRow, insertPolicyRow, insertVehicleRow } from './prismaFunction';
-import { PrismaClient } from '@prisma/client';
+import {
+  insertUserRow,
+  insertPolicyRow,
+  insertVehicleRow,
+  insertReportRow,
+  addWitnessToReport,
+  addPoliceInvestigation,
+} from './prismaFunction';
+import { PrismaClient, personInjured, PropertyDamage } from '@prisma/client';
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 async function main() {
   await prisma.user.deleteMany().catch(() => {});
@@ -37,7 +44,8 @@ async function main() {
     'lost of hearing on left side'
   );
 
-  await insertPolicyRow(
+  // get the id for inserting other things in relation to this
+  const policyId = await insertPolicyRow(
     'Sunlife Inc.',
     'John Smith',
     'Alice Reiner',
@@ -78,6 +86,86 @@ async function main() {
     'John Smith',
     '465461656'
   );
+
+  // id and reportId are -1 since we won't use them
+  const injuredPerson: personInjured[] = [
+    {
+      id: -1,
+      name: 'Alice Smith',
+      phone: '459-865-4256',
+      street: '221 Victoria Rd.',
+      city: 'Toronto',
+      country: 'CA',
+      province: 'ON',
+      postalCode: 'J1D 0I3',
+      dob: new Date('2013-04-23'),
+      hospital: "St. Henry Children's Hopsital",
+      natureOfInjuries: 'Broken right arm',
+      reportId: -1,
+    },
+  ];
+  const damage: PropertyDamage[] = [
+    {
+      id: -1,
+      nameOwner: 'Eric Wong',
+      phoneOwner: '526-859-5255',
+      ownerStreet: '25 Warrent St.',
+      ownerCity: 'Toronto',
+      ownerCountry: 'CA',
+      ownerProvince: 'ON',
+      ownerPostalCode: 'H1N8I6',
+      licenseNumberOwner: 'UCCR-257',
+      ownerProvIssue: 'ON',
+      yearOfVehicle: 2013,
+      nameInsurer: 'West Sun Foundation',
+      policyNumber: '125486595',
+      nameDriver: 'Eric Wong',
+      phoneDriver: '526-859-5255',
+      driverStreet: 'Warrent St.',
+      driverCity: 'Toronto',
+      driverCountry: 'CA',
+      driverProvince: 'ON',
+      driverPostalCode: 'H1N8I6',
+      driverLicenseNumber: 'UCCR-257',
+      driverProvIssue: 'ON',
+      reportId: -1,
+    },
+  ];
+
+  const reportId = await insertReportRow(
+    new Date('2000-04-23'),
+    `dark`,
+    'Pretty slippery and icy',
+    'Light snowing',
+    'Steeles and Finch Ave',
+    'The other car T-boned my car while it drove through a red light.',
+    'I had two children in the car. This is outrageous!',
+    60,
+    'South',
+    'Personal',
+    `major`,
+    policyId,
+    'user1',
+    'DHHE-875',
+    '$4000 cost to replace right doors',
+    injuredPerson,
+    undefined,
+    damage
+  );
+
+  await addWitnessToReport(
+    reportId,
+    'Amber Ellis',
+    '458-562-5897',
+    '223 Donda St.',
+    'Toronto',
+    'CA',
+    'ON',
+    'X2A 5U9',
+    'DHHE-875'
+  );
+
+  await addPoliceInvestigation(reportId, '12565');
 }
 
 main()

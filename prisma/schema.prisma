@@ -102,10 +102,10 @@ model Report {
   weatherCondition    String
   location            String
   accidentDescription String
-  comment             String
-  flag                String
-  adminComments       String
-  speed               String
+  comment             String?
+  flag                String?
+  adminComments       String?
+  speed               Int
   direction           String
   purposeForUsage     String
   damageDescription   String?
@@ -140,12 +140,7 @@ model personInjured {
 
 model PoliceInvestigation {
   id                      Int     @id @default(autoincrement())
-  officerName             String
-  officerNumber           String?
-  drugs                   String
-  collisionCentreLocation String
-  partyResponsible        String
-  charges                 String
+  policeReportNo          String
   reportId                Int
   Report                  Report  @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
 }
@@ -191,7 +186,7 @@ model PropertyDamage {
   ownerPostalCode     String
   licenseNumberOwner  String
   ownerProvIssue      String
-  yearOfVehicle       DateTime
+  yearOfVehicle       Int
   nameInsurer         String
   policyNumber        String
   nameDriver          String
