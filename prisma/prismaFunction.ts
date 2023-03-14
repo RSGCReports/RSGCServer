@@ -8,10 +8,7 @@ import {
   VehicleInformation,
   Witness,
   PoliceInvestigation,
-  ReportInsurance,
   ReportPersonalInfo,
-  ReportVehicleInfo,
-  VehicleWitness,
   PropertyDamage,
 } from '@prisma/client';
 
@@ -491,6 +488,153 @@ export async function insertReportRow(
   console.log(reportId, 'is added to the Report table.');
 
   return reportId;
+}
+
+export async function updateReportById(
+  reportId: Report['reportId'],
+  dayTime?: Report['dayTime'],
+  dayLight?: Report['dayLight'],
+  roadCondition?: Report['roadCondition'],
+  weatherCondition?: Report['weatherCondition'],
+  location?: Report['location'],
+  accidentDescription?: Report['accidentDescription'],
+  comment?: Report['comment'],
+  flag?: Report['flag'],
+  adminComments?: Report['adminComments'],
+  speed?: Report['speed'],
+  direction?: Report['direction'],
+  purposeForUsage?: Report['purposeForUsage'],
+  EstimateOfDamage?: Report['EstimateOfDamage'],
+  AdminId?: Report['AdminId'],
+  policyId?: InsurancePolicy['policyId'],
+  username?: User['username'],
+  licensePlateNo?: VehicleInformation['licensePlateNo'],
+  damageDescription?: Report['damageDescription'],
+  PersonInjured?: personInjured[],
+  Evidence?: Evidence[],
+  PropertyDamage?: PropertyDamage[]
+) {
+  await prisma.report.update({
+    where: { reportId },
+    data: {
+      dayTime,
+      dayLight,
+      roadCondition,
+      weatherCondition,
+      location,
+      accidentDescription,
+      comment,
+      flag,
+      adminComments,
+      speed,
+      direction,
+      purposeForUsage,
+      damageDescription,
+      EstimateOfDamage,
+      AdminId,
+      Insurance: { updateMany: { where: {}, data: { policyId } } },
+      PersonalInfo: { updateMany: { where: {}, data: { username } } },
+      VehicleInfo: { updateMany: { where: {}, data: { licensePlateNo } } },
+    },
+  });
+
+  if (PersonInjured && PersonInjured.length > 0) {
+    PersonInjured.forEach(async (element: personInjured) => {
+      await prisma.personInjured.update({
+        where: { id: element.id },
+        data: {
+          name: element.name,
+          phone: element.phone,
+          street: element.street,
+          city: element.city,
+          country: element.country,
+          province: element.province,
+          postalCode: element.postalCode,
+          dob: element.dob,
+          hospital: element.hospital,
+          natureOfInjuries: element.natureOfInjuries,
+        },
+      });
+    });
+  }
+
+  if (PropertyDamage && PropertyDamage.length > 0) {
+    PropertyDamage.forEach(async (element: PropertyDamage) => {
+      await prisma.propertyDamage.update({
+        where: { id: element.id },
+        data: {
+          nameOwner: element.nameOwner,
+          phoneOwner: element.phoneOwner,
+          ownerStreet: element.ownerStreet,
+          ownerCity: element.ownerCity,
+          ownerCountry: element.ownerCountry,
+          ownerProvince: element.ownerProvince,
+          ownerPostalCode: element.ownerPostalCode,
+          licenseNumberOwner: element.licenseNumberOwner,
+          ownerProvIssue: element.ownerProvIssue,
+          yearOfVehicle: element.yearOfVehicle,
+          nameInsurer: element.nameInsurer,
+          policyNumber: element.policyNumber,
+          nameDriver: element.nameDriver,
+          phoneDriver: element.phoneDriver,
+          driverStreet: element.driverStreet,
+          driverCity: element.driverCity,
+          driverCountry: element.driverCountry,
+          driverProvince: element.driverProvince,
+          driverPostalCode: element.driverPostalCode,
+          driverLicenseNumber: element.driverLicenseNumber,
+          driverProvIssue: element.driverProvIssue,
+        },
+      });
+    });
+  }
+
+  if (Evidence && Evidence.length > 0) {
+    Evidence.forEach(async (element: Evidence) => {
+      await prisma.evidence.update({
+        where: { id: element.id },
+        data: {
+          name: element.name,
+          data: element.data,
+        },
+      });
+    });
+  }
+
+  console.log(reportId, 'is edited in the Report table.');
+}
+
+// This finds all the reportId by username, and then it uses the ids to find and push all the reports to return the result/reports
+export async function getReportsByUsername(username: User['username']) {
+  let reportIds: ReportPersonalInfo[] = [];
+  await prisma.reportPersonalInfo.findMany({ where: { username } }).then((reportPersonalInfos) => {
+    reportIds = reportPersonalInfos;
+  });
+
+  let reports: Report[] = [];
+  if (reportIds && reportIds.length > 0) {
+    for (let i = 0; i < reportIds.length; i++) {
+      const report = await prisma.report.findUnique({
+        where: { reportId: reportIds[i].reportId },
+        include: {
+          PersonInjured: true,
+          PoliceInvestigation: true,
+          Witness: true,
+          Evidence: true,
+          Insurance: true,
+          PersonalInfo: true,
+          VehicleInfo: true,
+          PropertyDamage: true,
+        },
+      });
+
+      if (report) {
+        reports.push(report);
+      }
+    }
+  }
+
+  return reports;
 }
 
 export async function deleteReportById(reportId: Report['reportId']) {
