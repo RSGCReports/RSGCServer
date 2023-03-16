@@ -9,8 +9,13 @@ module.exports = async (req, res) => {
       where: { PolicyClient: { some: { username: req.user } } },
     });
     const vehicles = await prisma.vehicleInformation.findMany({
-      where: { OR: [{ registeredOwner: user.fullname }, { actualOwner: user.fullname }] },
+      where: {
+        Vehicle_Policy: {
+          some: { InsurancePolicy: { PolicyClient: { some: { username: req.user } } } },
+        },
+      },
     });
+
     // console.log(user);
     // console.log(policies);
     // console.log(vehicles);
