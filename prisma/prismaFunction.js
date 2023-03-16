@@ -36,15 +36,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.addPoliceInvestigation = exports.addWitnessToReport = exports.deleteReportById = exports.insertReportRow = exports.deleteVehicleBylicensePlateNo = exports.updateVehicleRow = exports.getVehicleBylicensePlateNo = exports.insertVehicleRow = exports.deletePolicyByUsername = exports.updatePolicyRow = exports.getPolicyByUsernameAndPolicyNumber = exports.insertPolicyRow = exports.deleteUserByUsername = exports.updateUserRow = exports.getUserByUsername = exports.insertUserRow = void 0;
+exports.addPoliceInvestigation = exports.addWitnessToReport = exports.deleteReportById = exports.insertReportRow = exports.deleteVehicleBylicensePlateNo = exports.updateVehicleRow = exports.getVehicleBylicensePlateNo = exports.insertVehicleRow = exports.deletePolicyByUsername = exports.updatePolicyRow = exports.getPolicyByUsernameAndPolicyNumber = exports.insertPolicyRow = exports.deleteUserByUsername = exports.updateUserRow = exports.getUserByUsername = exports.insertUserRow = exports.prisma = void 0;
 var client_1 = require("@prisma/client");
-var prisma = new client_1.PrismaClient();
+exports.prisma = new client_1.PrismaClient();
 // ====CRUD for User====
 function insertUserRow(username, fullname, email, dob, yearsDriving, homeStreet, homeCity, homeProvince, homeCountry, homePostalCode, phoneNumber, driverLicense, businessStreet, businessCity, businessProvince, businessCountry, businessPostalCode, disabilities) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.create({
+                case 0: return [4 /*yield*/, exports.prisma.user.create({
                         data: {
                             username: username,
                             fullname: fullname,
@@ -79,7 +79,7 @@ function getUserByUsername(username) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.findUnique({ where: { username: username } })];
+                case 0: return [4 /*yield*/, exports.prisma.user.findUnique({ where: { username: username } })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -90,7 +90,7 @@ function updateUserRow(username, fullname, email, dob, disabilities, yearsDrivin
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.update({
+                case 0: return [4 /*yield*/, exports.prisma.user.update({
                         where: { username: username },
                         data: {
                             username: username,
@@ -126,7 +126,7 @@ function deleteUserByUsername(username) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user["delete"]({ where: { username: username } })];
+                case 0: return [4 /*yield*/, exports.prisma.user["delete"]({ where: { username: username } })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -138,7 +138,7 @@ function insertPolicyRow(insurer, insurerName, Agent, homeStreet, homeCity, home
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.insurancePolicy.create({
+                case 0: return [4 /*yield*/, exports.prisma.insurancePolicy.create({
                         data: {
                             insurer: insurer,
                             insurerName: insurerName,
@@ -172,7 +172,7 @@ function getPolicyByUsernameAndPolicyNumber(insurerName, policyNumber) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.insurancePolicy.findFirst({
+                case 0: return [4 /*yield*/, exports.prisma.insurancePolicy.findFirst({
                         where: { AND: [{ insurerName: insurerName }, { policyNumber: policyNumber }] }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -194,7 +194,7 @@ function updatePolicyRow(insurer, insurerName, Agent, homeStreet, homeCity, home
                         }
                     });
                     // Do the update
-                    return [4 /*yield*/, prisma.insurancePolicy.update({
+                    return [4 /*yield*/, exports.prisma.insurancePolicy.update({
                             where: { policyId: policyId },
                             data: {
                                 insurer: insurer,
@@ -235,7 +235,7 @@ function deletePolicyByUsername(insurerName, policyNumber) {
                             policyId = insurancePolicy.policyId;
                         }
                     });
-                    return [4 /*yield*/, prisma.insurancePolicy["delete"]({ where: { policyId: policyId } })];
+                    return [4 /*yield*/, exports.prisma.insurancePolicy["delete"]({ where: { policyId: policyId } })];
                 case 1: 
                 // Do the update
                 return [2 /*return*/, _a.sent()];
@@ -250,7 +250,7 @@ function insertVehicleRow(licensePlateNo, registeredOwner, actualOwner, register
         var policyId;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.vehicleInformation.create({
+                case 0: return [4 /*yield*/, exports.prisma.vehicleInformation.create({
                         data: {
                             licensePlateNo: licensePlateNo,
                             registeredOwner: registeredOwner,
@@ -288,7 +288,7 @@ function insertVehicleRow(licensePlateNo, registeredOwner, actualOwner, register
                     if (!(policyId == -1)) return [3 /*break*/, 3];
                     console.log(licensePlateNo, 'does not have a VehiclePolicy bridge table due to getPolicyByUsernameAndPolicyNumber not finding a row.');
                     return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, prisma.vehiclePolicy.create({
+                case 3: return [4 /*yield*/, exports.prisma.vehiclePolicy.create({
                         data: {
                             policyId: policyId,
                             licensePlateNo: licensePlateNo
@@ -309,7 +309,7 @@ function getVehicleBylicensePlateNo(licensePlateNo) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.vehicleInformation.findUnique({
+                case 0: return [4 /*yield*/, exports.prisma.vehicleInformation.findUnique({
                         where: { licensePlateNo: licensePlateNo }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -324,7 +324,7 @@ function updateVehicleRow(licensePlateNo, registeredOwner, actualOwner, register
             switch (_a.label) {
                 case 0: 
                 // Do the update
-                return [4 /*yield*/, prisma.vehicleInformation.update({
+                return [4 /*yield*/, exports.prisma.vehicleInformation.update({
                         where: { licensePlateNo: licensePlateNo },
                         data: {
                             licensePlateNo: licensePlateNo,
@@ -362,7 +362,7 @@ function deleteVehicleBylicensePlateNo(licensePlateNo) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.vehicleInformation["delete"]({
+                case 0: return [4 /*yield*/, exports.prisma.vehicleInformation["delete"]({
                         where: { licensePlateNo: licensePlateNo }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -387,7 +387,7 @@ function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, loc
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.report.create({
+                case 0: return [4 /*yield*/, exports.prisma.report.create({
                         data: {
                             dayTime: dayTime,
                             dayLight: dayLight,
@@ -415,7 +415,7 @@ function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, loc
                         PersonInjured.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, prisma.personInjured.create({
+                                    case 0: return [4 /*yield*/, exports.prisma.personInjured.create({
                                             data: {
                                                 name: element.name,
                                                 phone: element.phone,
@@ -441,7 +441,7 @@ function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, loc
                         PropertyDamage.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, prisma.propertyDamage.create({
+                                    case 0: return [4 /*yield*/, exports.prisma.propertyDamage.create({
                                             data: {
                                                 nameOwner: element.nameOwner,
                                                 phoneOwner: element.phoneOwner,
@@ -478,7 +478,7 @@ function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, loc
                         Evidence.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, prisma.evidence.create({
+                                    case 0: return [4 /*yield*/, exports.prisma.evidence.create({
                                             data: {
                                                 name: element.name,
                                                 data: element.data,
@@ -503,7 +503,7 @@ function deleteReportById(reportId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.report["delete"]({
+                case 0: return [4 /*yield*/, exports.prisma.report["delete"]({
                         where: { reportId: reportId }
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -519,7 +519,7 @@ function addWitnessToReport(reportId, name, phone, street, city, country, provin
         var id;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.witness.create({
+                case 0: return [4 /*yield*/, exports.prisma.witness.create({
                         data: {
                             name: name,
                             phone: phone,
@@ -534,7 +534,7 @@ function addWitnessToReport(reportId, name, phone, street, city, country, provin
                 case 1:
                     id = (_a.sent()).id;
                     if (!whichCar) return [3 /*break*/, 3];
-                    return [4 /*yield*/, prisma.vehicleWitness.create({
+                    return [4 /*yield*/, exports.prisma.vehicleWitness.create({
                             data: {
                                 witnessId: whichCar.witnessId,
                                 licensePlateNo: whichCar.licensePlateNo
@@ -555,7 +555,7 @@ function addPoliceInvestigation(reportId, officerName, officerNumber, drugs, col
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.policeInvestigation.create({
+                case 0: return [4 /*yield*/, exports.prisma.policeInvestigation.create({
                         data: {
                             officerName: officerName,
                             officerNumber: officerNumber,
