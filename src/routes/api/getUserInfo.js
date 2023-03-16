@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
     const user = await getUserByUsername(req.user);
     // console.log('Retrieved User: ' + JSON.stringify(user));
     const policies = await prisma.insurancePolicy.findMany({
-      where: { PolicyClient: { every: { username: req.user } } },
+      where: { PolicyClient: { some: { username: req.user } } },
     });
     const vehicles = await prisma.vehicleInformation.findMany({
       where: { OR: [{ registeredOwner: user.fullname }, { actualOwner: user.fullname }] },
