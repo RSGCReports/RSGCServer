@@ -15,7 +15,7 @@ import {
   PropertyDamage,
 } from '@prisma/client';
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 // ====CRUD for User====
 export async function insertUserRow(
