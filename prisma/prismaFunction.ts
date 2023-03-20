@@ -381,6 +381,8 @@ export async function deleteVehicleBylicensePlateNo(
    - an array of Evidence
    - an array of PropertyDamage
 
+Witness and Police policy are not covered.
+
 This returns the id of the report.*/
 export async function insertReportRow(
   dayTime: Report['dayTime'],
@@ -490,6 +492,8 @@ export async function insertReportRow(
   return reportId;
 }
 
+/* This will take any info to update report by report id. Undefined arguments will be left alone.
+ Wtiness and police report update are not covered by this. User prisma.witness.update() and prisma.policeInvestigation.update() instead.*/
 export async function updateReportById(
   reportId: Report['reportId'],
   dayTime?: Report['dayTime'],
