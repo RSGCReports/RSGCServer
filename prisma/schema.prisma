@@ -36,8 +36,8 @@ model PolicyClient {
   policyClientId  Int             @id @default(autoincrement())
   username        String
   policyId        Int
-  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
-  User            User            @relation(fields: [username], references: [username], onDelete: Cascade)
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade, onUpdate: Cascade)
+  User            User            @relation(fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model InsurancePolicy {
@@ -90,8 +90,8 @@ model VehiclePolicy {
   VehiclePolicyId    Int                @id @default(autoincrement())
   policyId           Int
   licensePlateNo     String
-  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
-  InsurancePolicy    InsurancePolicy    @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade, onUpdate: Cascade)
+  InsurancePolicy    InsurancePolicy    @relation(fields: [policyId], references: [policyId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Report {
@@ -119,7 +119,7 @@ model Report {
   PersonalInfo        ReportPersonalInfo[]
   VehicleInfo         ReportVehicleInfo[]
   PropertyDamage      PropertyDamage[]
-  Admin               User?                 @relation(fields: [AdminId], references: [username], onDelete: Cascade)
+  Admin               User?                 @relation(fields: [AdminId], references: [username], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model personInjured {
@@ -135,14 +135,14 @@ model personInjured {
   hospital         String
   natureOfInjuries String
   reportId         Int
-  Report           Report   @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  Report           Report   @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model PoliceInvestigation {
   id                      Int     @id @default(autoincrement())
   policeReportNo          String
   reportId                Int
-  Report                  Report  @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  Report                  Report  @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Witness {
@@ -156,15 +156,15 @@ model Witness {
   postalCode String
   whichCar   VehicleWitness[]
   reportId   Int
-  Report     Report           @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  Report     Report           @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model VehicleWitness {
   id                 Int                @id @default(autoincrement())
   witnessId          Int
   licensePlateNo     String
-  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
-  Witness            Witness            @relation(fields: [witnessId], references: [id], onDelete: Cascade)
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade, onUpdate: Cascade)
+  Witness            Witness            @relation(fields: [witnessId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Evidence {
@@ -172,7 +172,7 @@ model Evidence {
   name     String
   data     Bytes
   reportId Int
-  Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model PropertyDamage {
@@ -199,31 +199,31 @@ model PropertyDamage {
   driverLicenseNumber String
   driverProvIssue     String
   reportId            Int
-  Report              Report   @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  Report              Report   @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ReportInsurance {
   id              Int             @id @default(autoincrement())
   policyId        Int
   reportId        Int
-  Report          Report          @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
-  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade)
+  Report          Report          @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
+  InsurancePolicy InsurancePolicy @relation(fields: [policyId], references: [policyId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ReportPersonalInfo {
   id       Int    @id @default(autoincrement())
   username String
   reportId Int
-  Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
-  User     User   @relation(fields: [username], references: [username], onDelete: Cascade)
+  Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
+  User     User   @relation(fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ReportVehicleInfo {
   id                 Int                @id @default(autoincrement())
   reportId           Int
   licensePlateNo     String
-  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade)
-  Report             Report             @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
+  VehicleInformation VehicleInformation @relation(fields: [licensePlateNo], references: [licensePlateNo], onDelete: Cascade, onUpdate: Cascade)
+  Report             Report             @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum DayLight {
