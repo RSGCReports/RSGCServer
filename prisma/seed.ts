@@ -98,7 +98,6 @@ async function main() {
       country: 'CA',
       province: 'ON',
       postalCode: 'J1D 0I3',
-      dob: new Date('2013-04-23'),
       hospital: "St. Henry Children's Hopsital",
       natureOfInjuries: 'Broken right arm',
       reportId: -1,
