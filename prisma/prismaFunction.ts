@@ -480,6 +480,8 @@ export async function insertReportRow(
       await prisma.evidence.create({
         data: {
           name: element.name,
+          size: element.size,
+          contentType: element.contentType,
           data: element.data,
           reportId,
         },
@@ -598,6 +600,8 @@ export async function updateReportById(
         where: { id: element.id },
         data: {
           name: element.name,
+          size: element.size,
+          contentType: element.contentType,
           data: element.data,
         },
       });
