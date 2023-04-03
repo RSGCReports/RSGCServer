@@ -1,4 +1,4 @@
-const { insertReportRow, getUserByUsername } = require('../../../prisma/prismaFunction');
+const { insertReportRow } = require('../../../prisma/prismaFunction');
 const logger = require('../../logger');
 const { prisma } = require('../../../prisma/prismaFunction');
 
@@ -74,16 +74,8 @@ module.exports = async (req, res) => {
   };
 
   console.log('REPORT: ', report);
-  // We dont actually end up using time for anything
-  // console.log('THE DATES DAMNIT ', report.date + 'T' + report.time);
-  // console.log(Date.parse(report.date + 'T' + report.time));
 
   try {
-    // get policy based on license plate
-    // await prisma.vehiclePolicy.findFirst({
-    //   where: {licensePlateNo:licensePlate}
-    // })
-
     const policy = await prisma.insurancePolicy.findFirst({
       where: { Vehicle_Policy: { some: { licensePlateNo: report.licensePlate } } },
     });
