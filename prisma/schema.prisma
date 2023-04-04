@@ -169,6 +169,8 @@ model VehicleWitness {
 model Evidence {
   id       Int    @id @default(autoincrement())
   name     String
+  size     Int
+  contentType String
   data     Bytes
   reportId Int
   Report   Report @relation(fields: [reportId], references: [reportId], onDelete: Cascade, onUpdate: Cascade)
