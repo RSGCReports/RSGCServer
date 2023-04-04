@@ -9,8 +9,8 @@ const pino = require('pino-http')({
   logger,
 });
 const bodyParser = require('body-parser');
-const multer = require('multer');
-const upload = multer();
+// const multer = require('multer');
+// const upload = multer();
 
 const port = parseInt(process.env.PORT);
 
@@ -24,7 +24,7 @@ app.use(passport.initialize());
 app.use(bodyParser.urlencoded({ extended: false }));
 // for parsing multipart/form-data
 // app.use(upload.array());
-app.use(express.static('uploads'));
+// app.use(express.static('uploads'));
 
 app.use('/', require('./routes'));
 
