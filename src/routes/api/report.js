@@ -30,37 +30,19 @@ module.exports = async (req, res) => {
   if (!body.witnesses) {
     logger.info('Missing Witnesses');
   } else {
-    if (Array.isArray(body.witnesses)) {
-      body.witnesses.forEach((witness) => {
-        witnesses.push(JSON.parse(witness));
-      });
-    } else {
-      witnesses.push(JSON.parse(body.witnesses));
-    }
+    witnesses = JSON.parse(body.witnesses);
   }
 
   if (!body.propertyDamages) {
     logger.info('Missing property damages');
   } else {
-    if (Array.isArray(body.propertyDamages)) {
-      body.propertyDamages.forEach((propertyDamage) => {
-        propertyDamages.push(JSON.parse(propertyDamage));
-      });
-    } else {
-      propertyDamages.push(JSON.parse(body.propertyDamages));
-    }
+    propertyDamages = JSON.parse(body.propertyDamages);
   }
 
   if (!body.personsInjured) {
     logger.info('Missing Injuries');
   } else {
-    if (Array.isArray(body.personsInjured)) {
-      body.personsInjured.forEach((personInjured) => {
-        personsInjured.push(JSON.parse(personInjured));
-      });
-    } else {
-      personsInjured.push(JSON.parse(body.personsInjured));
-    }
+    personsInjured = JSON.parse(body.personsInjured);
   }
 
   // if there is ____ then add _____ to report
