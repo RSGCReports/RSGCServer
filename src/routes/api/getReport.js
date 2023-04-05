@@ -12,9 +12,7 @@ module.exports = async (req, res) => {
         PoliceInvestigation: true,
         Witness: true,
         Evidence: true,
-
         PersonalInfo: true,
-
         PropertyDamage: true,
       },
     });
