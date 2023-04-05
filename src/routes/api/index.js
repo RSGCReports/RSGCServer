@@ -7,12 +7,14 @@ const upload = multer();
 router.get('/testAuth', require('./testAuth'));
 router.get('/userInfo', require('./getUserInfo'));
 router.get('/reports', require('./getReports'));
+router.get('/getPolicies', require('./getPolicies'));
 router.get('/report/:id', require('./getReport'));
 router.put('/updatePolicy', require('./updatePolicy'));
 router.put('/updatePersonal', require('./updatePersonal'));
 router.put('/updateVehicle', require('./updateVehicle'));
 router.put('/updatePolicy', require('./updatePolicy'));
 router.post('/postPolicy', express.json(), require('./postPolicy'));
+router.post('/postVehicle', express.json(), require('./postVehicle'));
 router.post('/report', upload.array('evidenceName'), require('./report'));
 router.post('/', express.json(), require('./post'));
 
