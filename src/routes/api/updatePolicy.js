@@ -23,11 +23,6 @@ module.exports = async (req, res) => {
 
     console.log(updatedPolicy);
 
-    // const vehicle = await prisma.vehicleInformation.findFirst({
-    //   where: { licensePlateNo: report.licensePlate },
-    // });
-
-    // console.log('Destructured: ', ...updatedPolicy);
     await prisma.insurancePolicy.update({
       where: {
         policyNumber: updatedPolicy.policyNumber,
