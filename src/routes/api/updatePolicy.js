@@ -35,21 +35,8 @@ module.exports = async (req, res) => {
       data: {
         ...updatedPolicy,
       },
-      // updatedPolicy.insurerName,
-      // updatedPolicy.policyNumber,
-      // updatedPolicy.Agent,
-      // updatedPolicy.homeStreet,
-      // updatedPolicy.homeCity,
-      // updatedPolicy.homeCountry,
-      // updatedPolicy.homeProvince,
-      // updatedPolicy.homePostalCode,
-      // updatedPolicy.insurer,
-      // updatedPolicy.businessStreet,
-      // updatedPolicy.businessCity,
-      // updatedPolicy.businessCountry,
-      // updatedPolicy.businessProvince,
-      // updatedPolicy.businessPostalCode
     });
+    res.status(201).json({ status: 'ok' });
   } catch (error) {
     logger.error(error);
     res.status(400).json({ status: 'bad request' });
