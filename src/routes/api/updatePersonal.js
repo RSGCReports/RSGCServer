@@ -1,4 +1,4 @@
-const { updateUserRow } = require('../../../prisma/prismaFunction');
+const { prisma } = require('../../../prisma/prismaFunction');
 const logger = require('../../logger');
 
 module.exports = async (req, res) => {
@@ -11,9 +11,9 @@ module.exports = async (req, res) => {
       ...{ username: req.user },
       ...{ fullname: person.fullname },
       ...{ email: person.email },
-      ...(person.dob && { dob: person.dob }),
+      ...(person.dob && { dob: new Date(person.dob) }),
       ...(person.disabilities && { disabilities: person.disabilities }),
-      ...(person.yearsDriving && { yearsDriving: person.yearsDriving }),
+      ...(person.yearsDriving && { yearsDriving: parseInt(person.yearsDriving) }),
       ...(person.homeStreet && { homeStreet: person.homeStreet }),
       ...(person.homeCity && { homeCity: person.homeCity }),
       ...(person.homeProvince && { homeProvince: person.homeProvince }),
@@ -27,26 +27,15 @@ module.exports = async (req, res) => {
       ...(person.phoneNumber && { phoneNumber: person.phoneNumber }),
       ...(person.driverLicense && { driverLicense: person.driverLicense }),
     };
-    await updateUserRow(
-      req.user,
-      person.fullname,
-      person.email,
-      new Date(person.dob),
-      person.disabilities,
-      parseInt(person.yearsDriving),
-      person.homeStreet,
-      person.homeCity,
-      person.homeProvince,
-      person.homeCountry,
-      person.homePostalCode,
-      person.businessStreet,
-      person.businessCity,
-      person.businessProvince,
-      person.businessCountry,
-      person.businessPostalCode,
-      person.phoneNumber,
-      person.driverLicense
-    );
+
+    console.log('DO WE GET HERE');
+    console.log('THIS IS DATE: ', person.dob);
+
+    await prisma.user.update({
+      where: { username: req.user },
+      data: { ...updatedPerson },
+    });
+
     res.status(201).json({ status: 'ok' });
   } catch (error) {
     logger.error(error);
