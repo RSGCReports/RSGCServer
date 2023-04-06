@@ -7,6 +7,7 @@ const upload = multer();
 router.get('/testAuth', require('./testAuth'));
 router.get('/userInfo', require('./getUserInfo'));
 router.get('/reports', require('./getReports'));
+router.get('/adminGetAllReports', require('./adminGetAllReports'));
 router.get('/getPolicies', require('./getPolicies'));
 router.get('/report/:id', require('./getReport'));
 router.put('/updatePolicy', express.json(), require('./updatePolicy'));
