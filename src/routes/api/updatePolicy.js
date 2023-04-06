@@ -1,7 +1,6 @@
 const { prisma } = require('../../../prisma/prismaFunction');
 const logger = require('../../logger');
 module.exports = async (req, res) => {
-  console.log('REACH UPDATE INSURANCE: ');
   const body = req.body;
   try {
     const updatedPolicy = {
@@ -20,8 +19,6 @@ module.exports = async (req, res) => {
       ...(body.businessProvince && { businessProvince: body.businessProvince }),
       ...(body.businessPostalCode && { businessPostalCode: body.businessPostalCode }),
     };
-
-    console.log(updatedPolicy);
 
     await prisma.insurancePolicy.update({
       where: {

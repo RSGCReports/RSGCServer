@@ -4,7 +4,7 @@ const logger = require('../../logger');
 module.exports = async (req, res) => {
   try {
     const user = await getUserByUsername(req.user);
-    // console.log('Retrieved User: ' + JSON.stringify(user));
+
     const policies = await prisma.insurancePolicy.findMany({
       where: { PolicyClient: { some: { username: req.user } } },
     });
@@ -16,13 +16,7 @@ module.exports = async (req, res) => {
       },
     });
 
-    // console.log(user);
-    // console.log(policies);
-    // console.log(vehicles);
-
     let userInfo = { user, policies, vehicles };
-
-    // console.log(userInfo);
 
     res.status(200).json({
       status: 'ok',

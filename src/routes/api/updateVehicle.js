@@ -1,3 +1,14 @@
+const { prisma } = require('../../../prisma/prismaFunction');
+const logger = require('../../logger');
 module.exports = async (req, res) => {
-  console.log('REACH UPDATE VEHICLE: ', req.body);
+  vehicleToBeUpdated = req.body.newVehicle;
+  try {
+    await prisma.vehicleInformation.update({
+      where: { licensePlateNo: vehicleToBeUpdated.licensePlateNo },
+      data: { ...vehicleToBeUpdated },
+    });
+  } catch (error) {
+    logger.error(error);
+    res.status(400).json({ status: 'bad request' });
+  }
 };
