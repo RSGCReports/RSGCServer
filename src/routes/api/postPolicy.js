@@ -3,7 +3,7 @@ const logger = require('../../logger');
 
 module.exports = async (req, res) => {
   const body = req.body;
-  console.log('We reached the postPolicy Body: ', body);
+
   try {
     await insertPolicyRow(
       body.insurer,

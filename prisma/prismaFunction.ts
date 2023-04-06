@@ -403,7 +403,8 @@ export async function insertReportRow(
   damageDescription?: Report['damageDescription'],
   PersonInjured?: personInjured[],
   Evidence?: Evidence[],
-  PropertyDamage?: PropertyDamage[]
+  PropertyDamage?: PropertyDamage[],
+  Witnesses?: Witness[]
 ) {
   const { reportId } = await prisma.report.create({
     data: {
@@ -473,6 +474,23 @@ export async function insertReportRow(
         },
       });
     });
+
+    if (Witnesses && Witnesses.length > 0) {
+      Witnesses.forEach(async (element: Witness) => {
+        await prisma.witness.create({
+          data: {
+            name: element.name,
+            phone: element.phone,
+            street: element.street,
+            city: element.city,
+            country: element.country,
+            province: element.province,
+            postalCode: element.postalCode,
+            reportId,
+          },
+        });
+      });
+    }
   }
 
   if (Evidence && Evidence.length > 0) {

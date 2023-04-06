@@ -3,13 +3,10 @@ const logger = require('../../logger');
 
 module.exports = async (req, res) => {
   const body = req.body;
-  console.log('We reached the postVehicle Body: ', body);
+
   try {
     vehicle = body.newVehicle;
     policy = body.policy;
-
-    // console.log(vehicle);
-    // console.log(policy);
 
     await insertVehicleRow(
       vehicle.licensePlateNo,

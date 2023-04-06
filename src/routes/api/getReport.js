@@ -28,8 +28,6 @@ module.exports = async (req, res) => {
 
     let reportInfo = { user, vehiclesPolicies, vehicle, report };
 
-    console.log(reportInfo);
-
     res.status(200).json({
       status: 'ok',
       text: 'Get report byId',

@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
     for (const report of reports) {
       const vehicle = await getVehicleBylicensePlateNo(report.VehicleInfo[0].licensePlateNo);
-      // console.log(vehicle);
+
       report.vehicle = vehicle;
     }
 

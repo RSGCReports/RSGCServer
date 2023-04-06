@@ -78,10 +78,6 @@ module.exports = async (req, res) => {
         insurancePolicy.policyNumber
       );
 
-      console.log(createdUser);
-      console.log(createdInsurancePolicy);
-      console.log(createdVehicleInfo);
-
       res.status(201).json({ status: 'ok' });
     } else {
       res.status(400).json({ status: 'error' });
@@ -94,7 +90,7 @@ module.exports = async (req, res) => {
 
 function registrationValidation(completeProfile) {
   // check if required fields are filled
-  console.log('Validation');
+
   if (
     completeProfile.user.username &&
     completeProfile.user.fullname &&
@@ -148,7 +144,6 @@ function registrationValidation(completeProfile) {
         /^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(completeProfile.insurancePolicy.homePostalCode)
       )
     ) {
-      console.log('false on required');
       return false;
     }
 
@@ -170,7 +165,6 @@ function registrationValidation(completeProfile) {
           /^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/.test(completeProfile.user.businessPostalCode)
         )
       ) {
-        console.log('false on first optional');
         return false;
       }
     }
@@ -195,13 +189,12 @@ function registrationValidation(completeProfile) {
           )
         )
       ) {
-        console.log('false on last optional');
         return false;
       }
     }
-    console.log('it be returning true');
+
     return true;
   }
-  console.log('false out of hand');
+
   return false;
 }

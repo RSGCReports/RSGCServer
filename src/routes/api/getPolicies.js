@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     const policies = await prisma.insurancePolicy.findMany({
       where: { PolicyClient: { some: { username: req.user } } },
     });
-    console.log(policies);
+
     res.status(200).json({
       status: 'ok',
       text: 'Get policies by user',

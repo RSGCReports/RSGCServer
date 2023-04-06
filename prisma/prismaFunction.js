@@ -384,7 +384,7 @@ exports.deleteVehicleBylicensePlateNo = deleteVehicleBylicensePlateNo;
 Witness and Police policy are not covered.
 
 This returns the id of the report.*/
-function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, location, accidentDescription, comment, speed, direction, purposeForUsage, EstimateOfDamage, policyId, username, licensePlateNo, damageDescription, PersonInjured, Evidence, PropertyDamage) {
+function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, location, accidentDescription, comment, speed, direction, purposeForUsage, EstimateOfDamage, policyId, username, licensePlateNo, damageDescription, PersonInjured, Evidence, PropertyDamage, Witnesses) {
     return __awaiter(this, void 0, void 0, function () {
         var reportId;
         var _this = this;
@@ -472,6 +472,29 @@ function insertReportRow(dayTime, dayLight, roadCondition, weatherCondition, loc
                                 }
                             });
                         }); });
+                        if (Witnesses && Witnesses.length > 0) {
+                            Witnesses.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, exports.prisma.witness.create({
+                                                data: {
+                                                    name: element.name,
+                                                    phone: element.phone,
+                                                    street: element.street,
+                                                    city: element.city,
+                                                    country: element.country,
+                                                    province: element.province,
+                                                    postalCode: element.postalCode,
+                                                    reportId: reportId
+                                                }
+                                            })];
+                                        case 1:
+                                            _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); });
+                        }
                     }
                     if (Evidence && Evidence.length > 0) {
                         Evidence.forEach(function (element) { return __awaiter(_this, void 0, void 0, function () {
