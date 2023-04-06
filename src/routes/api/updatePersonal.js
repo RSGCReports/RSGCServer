@@ -28,9 +28,6 @@ module.exports = async (req, res) => {
       ...(person.driverLicense && { driverLicense: person.driverLicense }),
     };
 
-    console.log('DO WE GET HERE');
-    console.log('THIS IS DATE: ', person.dob);
-
     await prisma.user.update({
       where: { username: req.user },
       data: { ...updatedPerson },
