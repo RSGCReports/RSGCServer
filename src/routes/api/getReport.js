@@ -14,16 +14,17 @@ module.exports = async (req, res) => {
         Evidence: true,
         PersonalInfo: true,
         PropertyDamage: true,
+        VehicleInfo: true,
       },
     });
     const user = await getUserByUsername(report.PersonalInfo[0].username);
 
     const vehicle = await prisma.vehicleInformation.findFirst({
-      where: { licensePlateNo: report.licensePlate },
+      where: { licensePlateNo: report.VehicleInfo[0].licensePlateNo },
     });
 
     const vehiclesPolicies = await prisma.insurancePolicy.findMany({
-      where: { Vehicle_Policy: { some: { licensePlateNo: report.licensePlateNo } } },
+      where: { Vehicle_Policy: { some: { licensePlateNo: report.VehicleInfo[0].licensePlateNo } } },
     });
 
     let reportInfo = { user, vehiclesPolicies, vehicle, report };
